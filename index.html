@@ -219,7 +219,7 @@ button.kart:active, .satir-btn button:active, .satir-btn a:active, .devam:active
 /* ----------------------------------------------------------- kanallar */
 const KANAL = {
   almanca: { ad: 'Almanca', kanal: 'almancakafa', dosya: 'de/kelimeler.json', pdf: 'de/almancakafa_kelimeler.pdf', dil: 'Almancada', artikel: ['der', 'die', 'das'], harfEk: 'aeinrstlhgu', bayrak: ['#1E1B3A', '#E5484D', '#FFC533'] },
-  ingilizce: { ad: 'İngilizce', kanal: 'ingilizce.kafa', dosya: 'en/kelimeler.json', pdf: 'en/ingilizcekafa_kelimeler.pdf', dil: 'İngilizcede', harfEk: 'aeiorstlnhd', bayrak: ['#2F6FE4', '#FFFFFF', '#E5484D'], yon: 'rows' },
+  ingilizce: { ad: 'İngilizce', kanal: 'ingilizce.kafa', dosya: 'en/kelimeler.json', pdf: 'en/ingilizcekafa_kelimeler.pdf', dil: 'İngilizcede', harfEk: 'aeiorstlnhd', bayrak: 'uk' },
   fransizca: { ad: 'Fransızca', kanal: 'fransizcakafa', dosya: 'fr/kelimeler.json', pdf: 'fr/fransizcakafa_kelimeler.pdf', dil: 'Fransızcada', artikel: ['le', 'la'], harfEk: 'aeiorstlnuc', bayrak: ['#2F6FE4', '#FFFFFF', '#E5484D'], yon: 'columns' },
   turkce: { ad: 'Turkish', kanal: 'turkish_kafa', dosya: 'tk/kelimeler.json', dil: 'in Turkish', harfEk: 'aeıiklmnrsuçşü', en: true, ayri: true }
 };
@@ -254,7 +254,8 @@ function seslen(metin, btn) {
 }
 if (SESVAR) { speechSynthesis.getVoices(); document.addEventListener('click', (e) => { const b = e.target.closest('.ses'); if (b) { e.preventDefault(); e.stopPropagation(); seslen(b.dataset.s, b); } }, true); }
 const artCip = (w) => w.art ? `<span class="art ${w.art.replace(/'/g, '')}">${w.art}</span>` : '';
-const bayrak = (c, yon = 'rows') => `<span class="bayrak" aria-hidden="true" style="grid-template-${yon}:1fr 1fr 1fr">${c.map((r) => `<i style="background:${r}"></i>`).join('')}</span>`;
+const UK_BAYRAK = `<svg class="bayrak" viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" fill="#23409A"/><path d="M0 0L60 60M60 0L0 60" stroke="#fff" stroke-width="12"/><path d="M0 0L60 60M60 0L0 60" stroke="#E5484D" stroke-width="5"/><path d="M30 0V60M0 30H60" stroke="#fff" stroke-width="18"/><path d="M30 0V60M0 30H60" stroke="#E5484D" stroke-width="10"/></svg>`;
+const bayrak = (c, yon = 'rows') => c === 'uk' ? UK_BAYRAK : `<span class="bayrak" aria-hidden="true" style="grid-template-${yon}:1fr 1fr 1fr">${c.map((r) => `<i style="background:${r}"></i>`).join('')}</span>`;
 function icerikHtml(w) {   // ses benzeri kısmı vurgula
   const s = w.icerik, k = kucuk(w.ses.replace(/[.…]+$/, '')); let out = '', i = 0; const ks = kucuk(s);
   while (i < s.length) { const j = ks.indexOf(k, i); if (j < 0 || !k) { out += esc(s.slice(i)); break; } out += esc(s.slice(i, j)) + '<mark>' + esc(s.slice(j, j + k.length)) + '</mark>'; i = j + k.length; }
