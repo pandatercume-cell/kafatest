@@ -125,6 +125,34 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 .ara { width: 100%; padding: 14px 16px; border-radius: 18px; border: 3px solid var(--cizgi); background: var(--kart); color: var(--murekkep); font: inherit; font-weight: 600; box-shadow: 0 4px 0 var(--cizgi) }
 .sallan { animation: sallan .35s } @keyframes sallan { 25% { transform: translateX(-6px) } 75% { transform: translateX(6px) } }
 .zipla { animation: zipla .4s } @keyframes zipla { 40% { transform: translateY(-10px) scale(1.04) } }
+.ses { flex: none; width: 46px; height: 46px; border-radius: 50%; border: 2.5px solid var(--cizgi); background: var(--kart); color: var(--murekkep); box-shadow: 0 3px 0 var(--cizgi); display: inline-grid; place-items: center; cursor: pointer; padding: 0; vertical-align: middle }
+.ses:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--cizgi) }
+.ses svg { width: 22px; height: 22px } .ses.caliyor { background: var(--sari, #FFC533) }
+.liste-ogesi .ses, .bildirim .ses { width: 34px; height: 34px; margin-left: 6px } .liste-ogesi .ses svg, .bildirim .ses svg { width: 17px; height: 17px }
+#baski { display: none }
+.uyari-kutu { border: 2.5px dashed var(--cizgi); border-radius: 18px; padding: 14px 16px; font-size: 15px; background: var(--kart) }
+@media print {
+  @page { size: A4; margin: 13mm 12mm }
+  html, body { background: #fff !important; color: #1E1B3A !important }
+  body > *:not(#baski) { display: none !important }
+  #baski { display: block !important; font-family: var(--f-ust); font-size: 10.5pt; color: #1E1B3A; -webkit-print-color-adjust: exact; print-color-adjust: exact }
+  #baski h1 { font-size: 26pt; margin: 0; line-height: 1 } #baski h1 span { color: #6B4EE6 }
+  #baski .bust { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #1E1B3A; padding-bottom: 3mm; margin-bottom: 5mm; gap: 6mm }
+  #baski .bust small { font-weight: 500; color: #6B6785 }
+  #baski .bliste { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm }
+  #baski .bk { display: grid; grid-template-columns: 14mm 1fr; gap: 3mm; align-items: center; border: 2px solid #1E1B3A; border-radius: 4mm; padding: 2mm 3mm; break-inside: avoid }
+  #baski .bk img { width: 14mm; height: 14mm; border-radius: 50%; border: 1.5px solid #1E1B3A }
+  #baski .bk b { font-size: 12pt } #baski .bk p { margin: .5mm 0 0; font-size: 8.5pt; color: #5d5975; font-weight: 500 }
+  #baski mark { background: #FFC533; color: #1E1B3A; border-radius: 1mm; padding: 0 .3mm }
+  #baski .a { font-style: normal; font-size: 8pt; color: #fff; background: #6B4EE6; border-radius: 3mm; padding: .3mm 2mm; font-weight: 800; vertical-align: 2px }
+  #baski .a.der, #baski .a.le { background: #2F6FE4 } #baski .a.die, #baski .a.la { background: #E5484D } #baski .a.das, #baski .a.les { background: #2FA36B }
+  #baski .sayfa { break-before: page }
+  #baski .bolum { border: 2px solid #1E1B3A; border-radius: 4mm; padding: 4mm 5mm; margin-bottom: 5mm; break-inside: avoid } #baski .bolum h3 { margin: 0 0 3mm; font-size: 12.5pt }
+  #baski .sat { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm 8mm } #baski .sat div { display: flex; gap: 2mm; align-items: baseline; font-weight: 700 } #baski .sat span.cizgi { flex: 1; border-bottom: 1.5px dotted #888; height: 5mm }
+  #baski .es { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm 10mm } #baski .es div { display: flex; align-items: center; gap: 3mm; font-weight: 700 }
+  #baski .es img { width: 15mm; height: 15mm; border-radius: 50%; border: 1.5px solid #1E1B3A } #baski .kutu { width: 8mm; height: 8mm; border: 1.5px solid #1E1B3A; border-radius: 2mm }
+  #baski .not { font-size: 8.5pt; color: #6B6785; font-weight: 500 } #baski .cevap { font-size: 9pt; font-weight: 500 } #baski .cevap b { font-weight: 800 }
+}
 @media (prefers-reduced-motion: reduce) { .sallan, .zipla { animation: none } .ilerleme i { transition: none } }
 </style>
 
@@ -154,6 +182,18 @@ const karistir = (a, r) => { a = a.slice(); for (let i = a.length - 1; i > 0; i-
 const depo = { oku(k, v) { try { const x = localStorage.getItem(k); return x ? JSON.parse(x) : v; } catch (e) { return v; } }, yaz(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 const reel = (w) => w.reel ? 'https://www.instagram.com/reel/' + w.reel + '/' : 'https://www.instagram.com/' + K.kanal + '/';
 const tamAd = (w) => (w.art ? w.art + (/'$/.test(w.art) ? '' : ' ') : '') + w.de;
+const SESDIL = { almanca: 'de-DE', ingilizce: 'en-US', fransizca: 'fr-FR' };
+const SESVAR = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+const sesBtn = (w) => SESVAR ? `<button class="ses" type="button" data-s="${esc(tamAd(w))}" aria-label="Dinle: ${esc(tamAd(w))}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a4.5 4.5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M18.5 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>` : '';
+function seslen(metin, btn) {
+  if (!SESVAR) return; const dil = SESDIL[KEY] || 'en-US'; speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(metin); u.lang = dil; u.rate = 0.85;
+  const v = speechSynthesis.getVoices().filter((x) => x.lang.replace('_', '-').toLowerCase().startsWith(dil.slice(0, 2).toLowerCase()));
+  u.voice = v.find((x) => x.lang.replace('_', '-') === dil && /google|natural|premium|enhanced/i.test(x.name)) || v.find((x) => x.lang.replace('_', '-') === dil) || v[0] || null;
+  if (btn) { btn.classList.add('caliyor'); u.onend = u.onerror = () => btn.classList.remove('caliyor'); }
+  speechSynthesis.speak(u);
+}
+if (SESVAR) { speechSynthesis.getVoices(); document.addEventListener('click', (e) => { const b = e.target.closest('.ses'); if (b) { e.preventDefault(); e.stopPropagation(); seslen(b.dataset.s, b); } }, true); }
 const artCip = (w) => w.art ? `<span class="art ${w.art.replace(/'/g, '')}">${w.art}</span>` : '';
 const bayrak = (c, yon = 'rows') => `<span class="bayrak" aria-hidden="true" style="grid-template-${yon}:1fr 1fr 1fr">${c.map((r) => `<i style="background:${r}"></i>`).join('')}</span>`;
 function icerikHtml(w) {   // ses benzeri kısmı vurgula
@@ -189,13 +229,14 @@ function menu() {
     $(`<div><h1>${K.ad} <span class="vurgu">testi</span></h1><p class="alt" style="margin-top:6px">${W.length} kelime · hepsi @${K.kanal} videolarından</p></div>`),
     $(`<div class="kart seri"><div class="alev">${aktif}</div><div><b>${aktif ? aktif + ' günlük seri' : 'Seriye bugün başla'}</b><p class="alt">${bitti ? 'Bugünün testi tamam: ' + s.bugunPuan + '/' + SORU_SAYISI + '. Yarın yeni sorular!' : 'Her gün 10 soru çöz, seriyi bozma.'}${s.enIyi > 1 ? ' En uzun serin: ' + s.enIyi + ' gün.' : ''}</p></div></div>`),
     $(`<button class="kart buyuk ${bitti ? 'bitti' : ''}" id="gunluk"><b>${bitti ? 'Bugünün testini tekrar çöz' : 'Günün testi'}</b><span>10 soru · resim, harf, ${K.artikel ? 'artikel, ' : ''}eşleştirme</span></button>`),
-    $(`<div class="izgara2"><button class="kart kucuk" id="serbest"><b>Karışık test</b><small>Rastgele 10 soru</small></button><button class="kart kucuk" id="liste"><b>Kelime listesi</b><small>Videolarıyla</small></button><a class="kart kucuk" href="${K.pdf}" target="_blank" rel="noopener"><b>PDF</b><small>Liste + basılı test</small></a><button class="kart kucuk" id="yeni"><b>Yeni kelimeler</b><small>Son 10 video</small></button></div>`)
+    $(`<div class="izgara2"><button class="kart kucuk" id="serbest"><b>Karışık test</b><small>Rastgele 10 soru</small></button><button class="kart kucuk" id="liste"><b>Kelime listesi</b><small>Videolarıyla</small></button><button class="kart kucuk" id="pdf"><b>PDF</b><small>Liste + basılı test</small></button><button class="kart kucuk" id="yeni"><b>Yeni kelimeler</b><small>Son 10 video</small></button></div>`)
   ]);
   uyg.querySelector('.geri').onclick = () => { location.hash = ''; };
   uyg.querySelector('#gunluk').onclick = () => basla('gunluk');
   uyg.querySelector('#serbest').onclick = () => basla('serbest');
   uyg.querySelector('#yeni').onclick = () => basla('yeni');
   uyg.querySelector('#liste').onclick = listeEkrani;
+  uyg.querySelector('#pdf').onclick = baskiEkrani;
 }
 /* ----------------------------------------------------------- test üretimi */
 function basla(tur) {
@@ -216,11 +257,11 @@ function soruGoster() {
   const govde = [];
   if (q.tur === 'resim') {
     const s = karistir([w, ...celdirici(w, 3, r, (x) => x.ikon)], r);
-    govde.push($(`<div class="kart soru"><span class="soru-tip">Hangi resim?</span><div class="kelime">${artCip(w)}<span>${esc(w.de)}</span></div></div>`));
+    govde.push($(`<div class="kart soru"><span class="soru-tip">Hangi resim?</span><div class="kelime">${artCip(w)}<span>${esc(w.de)}</span>${sesBtn(w)}</div></div>`));
     govde.push(secenekler(s.map((x) => ({ x, html: `<img src="${x.ikon}" alt="">`, sinif: 'resim', etiket: x.tr })), w, (x) => x === w));
   } else if (q.tur === 'anlam') {
     const s = karistir([w, ...celdirici(w, 3, r)], r);
-    govde.push($(`<div class="kart soru"><span class="soru-tip">Ne demek?</span><div class="kelime">${artCip(w)}<span>${esc(w.de)}</span></div></div>`));
+    govde.push($(`<div class="kart soru"><span class="soru-tip">Ne demek?</span><div class="kelime">${artCip(w)}<span>${esc(w.de)}</span>${sesBtn(w)}</div></div>`));
     govde.push(secenekler(s.map((x) => ({ x, html: esc(x.tr) })), w, (x) => x === w));
   } else if (q.tur === 'ters') {
     const s = karistir([w, ...celdirici(w, 3, r, (x) => x.de)], r);
@@ -278,7 +319,7 @@ function eslesSoru(w, r) {
 function sonuclandir(ok, w, not) {
   if (ok) test.dogru++; else test.yanlislar.push(w);
   const dogruMesaj = ['Süper!', 'Kafana kazındı!', 'Aynen böyle!', 'Bildin!'][Math.floor(test.r() * 4)];
-  const b = $(`<div class="kart bildirim ${ok ? 'd' : 'y'}"><img src="ortak/kafa_${ok ? 'el' : 'uzg'}.png" alt=""><div><b>${ok ? dogruMesaj : 'Olmadı'}</b><p>${not ? esc(not) + ' ' : ''}<strong>${esc(tamAd(w))}</strong> = ${esc(w.tr)}</p><p>${icerikHtml(w)}</p>${ok ? '' : `<p><a class="video" href="${reel(w)}" target="_blank" rel="noopener">Videosunu izle ↗</a></p>`}</div></div>`);
+  const b = $(`<div class="kart bildirim ${ok ? 'd' : 'y'}"><img src="ortak/kafa_${ok ? 'el' : 'uzg'}.png" alt=""><div><b>${ok ? dogruMesaj : 'Olmadı'}</b><p>${not ? esc(not) + ' ' : ''}<strong>${esc(tamAd(w))}</strong>${sesBtn(w)} = ${esc(w.tr)}</p><p>${icerikHtml(w)}</p>${ok ? '' : `<p><a class="video" href="${reel(w)}" target="_blank" rel="noopener">Videosunu izle ↗</a></p>`}</div></div>`);
   const d = $(`<button class="devam">${test.i + 1 < SORU_SAYISI ? 'Devam' : 'Sonucu gör'}</button>`);
   d.onclick = () => { test.i++; test.i < SORU_SAYISI ? soruGoster() : sonucEkrani(); };
   uyg.append(b, d); d.scrollIntoView({ behavior: 'smooth', block: 'end' }); d.focus({ preventScroll: true });
@@ -325,7 +366,38 @@ async function storyCiz(p, s) {
   return new Promise((ok) => c.toBlob(ok, 'image/png'));
 }
 /* ----------------------------------------------------------- kelime listesi */
-function ogeHtml(w) { return `<div class="kart liste-ogesi"><img src="${w.ikon}" alt="" loading="lazy"><div><b>${artCip(w)}${esc(w.de)}<span class="alt" style="font-size:16px">= ${esc(w.tr)}</span></b><p>${icerikHtml(w)}</p><a class="video" href="${reel(w)}" target="_blank" rel="noopener">Videosunu izle ↗</a></div></div>`; }
+function ogeHtml(w) { return `<div class="kart liste-ogesi"><img src="${w.ikon}" alt="" loading="lazy"><div><b>${artCip(w)}${esc(w.de)}${sesBtn(w)}<span class="alt" style="font-size:16px">= ${esc(w.tr)}</span></b><p>${icerikHtml(w)}</p><a class="video" href="${reel(w)}" target="_blank" rel="noopener">Videosunu izle ↗</a></div></div>`; }
+/* ----------------------------------------------------------- basılı sürüm (tarayıcının "PDF olarak kaydet"i) */
+const UYGULAMA_ICI = /Instagram|FBAN|FBAV|FB_IAB|Line\/|TikTok|musical_ly|Bytedance/i.test(navigator.userAgent);
+function baskiHtml() {
+  const karis = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const ad = (w) => (w.art ? `<i class="a ${w.art.replace(/'/g, '')}">${esc(w.art)}</i> ` : '') + esc(w.de);
+  const ARTS = K.artikel, isimler = W.filter((w) => ARTS && ARTS.includes(w.art));
+  const A = karis(W).slice(0, 14), B = karis(isimler).slice(0, 14), C = karis(W).slice(0, 6), Cs = karis(C);
+  const tarih = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+  const n3 = ARTS ? 3 : 2;
+  return `<div class="bust"><div><h1>${esc(K.ad)} <span>kelimelerim</span></h1><small>@${K.kanal} videolarındaki ${W.length} kelime · ${tarih}</small></div><small>Altı sarı olan ses benzerliği aklında tutmanı sağlar.</small></div>
+<div class="bliste">${W.map((w) => `<div class="bk"><img src="${w.ikon}" alt=""><div><b>${ad(w)}</b> <span style="color:#6B6785">= ${esc(w.tr)}</span><p>${icerikHtml(w)}</p></div></div>`).join('')}</div>
+<div class="sayfa"><div class="bust"><div><h1>Basılı <span>test</span></h1><small>@${K.kanal} · ${tarih}</small></div><small>Ad: ______________________</small></div>
+<div class="bolum"><h3>1. Türkçesini yaz</h3><div class="sat">${A.map((w, i) => `<div>${i + 1}. ${ad(w)} <span class="cizgi"></span></div>`).join('')}</div></div>
+${ARTS ? `<div class="bolum"><h3>2. Artikelini yaz: ${ARTS.length === 3 ? 'der, die ya da das' : 'le ya da la'}</h3><div class="sat">${B.map((w, i) => `<div>${i + 1}. <span class="cizgi" style="flex:0 0 14mm"></span> ${esc(w.de)} <small class="not">(${esc(w.tr)})</small></div>`).join('')}</div></div>` : ''}
+<div class="bolum"><h3>${n3}. Resimle eşleştir: harfi kutuya yaz</h3><div class="es">${C.map((w, i) => `<div><div class="kutu"></div><img src="${w.ikon}" alt=""></div><div>${'ABCDEF'[i]}) ${ad(Cs[i])}</div>`).join('')}</div></div>
+<div class="bolum"><h3>Cevap anahtarı</h3><div class="cevap"><p><b>1.</b> ${A.map((w, i) => `${i + 1}) ${esc(w.tr)}`).join(' · ')}</p>${ARTS ? `<p><b>2.</b> ${B.map((w, i) => `${i + 1}) ${esc(w.art)}`).join(' · ')}</p>` : ''}<p><b>${n3}.</b> ${C.map((w, i) => `${i + 1}. resim: ${'ABCDEF'[Cs.indexOf(w)]}`).join(' · ')}</p></div></div></div>`;
+}
+function baskiEkrani() {
+  let b = document.getElementById('baski'); if (!b) { b = document.createElement('div'); b.id = 'baski'; document.body.append(b); }
+  b.innerHTML = baskiHtml();   // resimler şimdiden yüklensin
+  ekran([
+    $(`<div class="ust"><button class="geri" aria-label="Menüye dön">←</button><span class="etiket">${W.length} kelime</span></div>`),
+    $(`<div><h1>Basılı <span class="vurgu">sürüm</span></h1><p class="alt" style="margin-top:6px">Kelime listesi + basılı test + cevap anahtarı. Her açışta yeni sorular, hep güncel.</p></div>`),
+    UYGULAMA_ICI
+      ? $(`<div class="uyari-kutu"><b>Instagram içinden açtın.</b><br>Instagram'ın tarayıcısı PDF kaydetmeye izin vermiyor. Sağ üstteki <b>•••</b> menüsüne dokun, <b>"Tarayıcıda aç"</b> de, sonra bu düğmeye tekrar bas.</div>`)
+      : $(`<button class="kart buyuk" id="yazdir"><b>PDF olarak kaydet / Yazdır</b><span>Açılan ekranda “PDF olarak kaydet”i seç</span></button>`),
+    $(`<p class="alt" style="font-size:14px">iPhone: Paylaş → “Dosyalara Kaydet”. Android: Yazıcı yerine “PDF olarak kaydet”. Bilgisayar: Hedef → “PDF olarak kaydet”.</p>`)
+  ]);
+  uyg.querySelector('.geri').onclick = menu;
+  const y = uyg.querySelector('#yazdir'); if (y) y.onclick = () => window.print();
+}
 function listeEkrani() {
   ekran([
     $(`<div class="ust"><button class="geri" aria-label="Menüye dön">←</button><span class="etiket">${W.length} kelime</span></div>`),
