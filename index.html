@@ -8,6 +8,21 @@
 <meta property="og:title" content="Kafa Kelime Testi">
 <meta property="og:description" content="Videolarda öğrendiğin kelimelerle kendini dene.">
 <meta property="og:url" content="https://kafakelime.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kafa Kelime">
+<meta property="og:image" content="https://kafakelime.com/ortak/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="kafakelime.com: Videolardaki kelimelerle kendini test et">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kafa Kelime Testi">
+<meta name="twitter:description" content="Videolarda öğrendiğin kelimelerle kendini dene.">
+<meta name="twitter:image" content="https://kafakelime.com/ortak/og.jpg">
+<link rel="icon" type="image/png" sizes="64x64" href="ortak/ikon64.png">
+<link rel="apple-touch-icon" href="ortak/ikon180.png">
+<script>window.goatcounter = { no_onload: true };</script>
+<script data-goatcounter="https://kafakelime.goatcounter.com/count" async src="https://gc.zgo.at/count.js" onload="var q=window._gcq||[];window._gcq={push:function(f){try{f()}catch(e){}}};q.forEach(function(f){try{f()}catch(e){}})"></script>
 <meta name="theme-color" content="#FFD873">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap">
@@ -226,8 +241,11 @@ const tamAd = (w) => (w.art ? w.art + (/'$/.test(w.art) ? '' : ' ') : '') + w.de
 const SESDIL = { almanca: 'de-DE', ingilizce: 'en-US', fransizca: 'fr-FR', turkce: 'tr-TR' };
 const SESVAR = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
 const sesBtn = (w) => SESVAR ? `<button class="ses" type="button" data-s="${esc(tamAd(w))}" aria-label="${t('Dinle', 'Listen')}: ${esc(tamAd(w))}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a4.5 4.5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M18.5 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>` : '';
+const say = (yol, baslik, olay) => { try { const f = () => window.goatcounter.count({ path: yol, title: baslik || yol, event: !!olay, referrer: /Instagram/i.test(navigator.userAgent) && !document.referrer ? 'instagram-uygulamasi' : undefined }); (window._gcq = window._gcq || []).push(f); } catch (e) {} };
+const olay = (yol) => say(yol, yol, true);
+document.addEventListener('click', (e) => { const a = e.target.closest && e.target.closest('a'); if (!a) return; if (a.classList.contains('video')) olay('video-izle/' + KEY); else if (a.id === 'igac') olay('instagram-ac/' + KEY); else if (/instagram\.com\/([^/]+)/.test(a.href)) olay('profil/' + a.href.match(/instagram\.com\/([^/]+)/)[1]); }, true);
 function seslen(metin, btn) {
-  if (!SESVAR) return; const dil = SESDIL[KEY] || 'en-US'; speechSynthesis.cancel();
+  if (!SESVAR) return; olay('ses/' + KEY); const dil = SESDIL[KEY] || 'en-US'; speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(metin); u.lang = dil; u.rate = 0.85;
   const v = speechSynthesis.getVoices().filter((x) => x.lang.replace('_', '-').toLowerCase().startsWith(dil.slice(0, 2).toLowerCase()));
   u.voice = v.find((x) => x.lang.replace('_', '-') === dil && /google|natural|premium|enhanced/i.test(x.name)) || v.find((x) => x.lang.replace('_', '-') === dil) || v[0] || null;
@@ -259,14 +277,14 @@ const digerleri = () => Object.entries(KANAL).filter(([k, d]) => k !== KEY && !d
 function digerDiller() {
   if (K.en) return null;
   const k = $(`<div class="kart diger"><h2>Diğer dillerimiz</h2><p class="alt">Aynı kafayla başka bir dil öğren.</p><div class="diger-liste">${digerleri().map(([k, d]) => `<div class="diger-oge">${bayrak(d.bayrak, d.yon)}<div><b>${d.ad}</b><small><a href="https://www.instagram.com/${d.kanal}/" target="_blank" rel="noopener">@${d.kanal}</a></small></div><button data-git="${k}">Teste git</button></div>`).join('')}<div class="diger-oge">${TK_BAYRAK}<div><b>Türkçe</b><small>Türkçe öğrenen yabancı arkadaşına öner: <a href="https://www.instagram.com/turkish_kafa/" target="_blank" rel="noopener">@turkish_kafa</a></small></div></div></div></div>`);
-  k.querySelectorAll('[data-git]').forEach((b) => b.onclick = () => { location.hash = b.dataset.git; });
+  k.querySelectorAll('[data-git]').forEach((b) => b.onclick = () => { olay('capraz/menu/' + KEY + '-' + b.dataset.git); location.hash = b.dataset.git; });
   return k;
 }
 function digerOneri() {
   if (K.en) return null;
   const l = digerleri(); const [k, d] = l[Math.floor(Math.random() * l.length)];
   const c = $(`<div class="kart diger oneri">${bayrak(d.bayrak, d.yon)}<div><b>${d.ad} ${/[eiöü][^aeıioöuü]*$/i.test(d.ad) ? 'de' : 'da'} öğreniyor musun?</b><p class="alt">@${d.kanal} videolarındaki kelimelerle kendini dene.</p></div><button class="ana" data-git="${k}">${d.ad} testi →</button></div>`);
-  c.querySelector('[data-git]').onclick = () => { location.hash = k; };
+  c.querySelector('[data-git]').onclick = () => { olay('capraz/sonuc/' + KEY + '-' + k); location.hash = k; };
   return c;
 }
 /* ----------------------------------------------------------- ekranlar */
@@ -304,6 +322,7 @@ function menu() {
 }
 /* ----------------------------------------------------------- test üretimi */
 function basla(tur) {
+  olay('test-basladi/' + KEY + '/' + tur);
   const r = rng(tur === 'gunluk' ? KEY + bugun() : String(Math.random()));
   let havuz = tur === 'yeni' ? W.slice(-10) : W;
   const sec = karistir(havuz, r).slice(0, SORU_SAYISI);
@@ -390,7 +409,7 @@ function sonuclandir(ok, w, not) {
 }
 /* ----------------------------------------------------------- sonuç + story kartı */
 function sonucEkrani() {
-  const p = test.dogru; let s = seriOku();
+  const p = test.dogru; olay('test-bitti/' + KEY + '/' + test.tur); olay('puan/' + KEY + '/' + p); let s = seriOku();
   if (test.tur === 'gunluk') { const t = bugun(); if (s.son !== t) { s.gun = s.son === dun() ? s.gun + 1 : 1; s.son = t; s.enIyi = Math.max(s.enIyi, s.gun); } s.bugunPuan = p; depo.yaz('seri_' + KEY, s); }
   const mesaj = K.en ? (p === 10 ? 'Perfect! Your head is a word bank.' : p >= 8 ? 'Very good! Just a few more words.' : p >= 5 ? 'Not bad. Watch the videos of your mistakes.' : 'That was a warm-up. Watch the videos and try again.')
     : p === 10 ? 'Kusursuz! Kafan tam kelime deposu.' : p >= 8 ? 'Çok iyi! Birkaç kelime daha, tamamdır.' : p >= 5 ? 'Fena değil. Yanlışların videolarına bir bak.' : 'Isınma turuydu. Videoları izleyip tekrar dene.';
@@ -407,11 +426,11 @@ function sonucEkrani() {
   storyCiz(p, s).then((blob) => {
     const url = URL.createObjectURL(blob); uyg.querySelector('#story').src = url; const not = uyg.querySelector('#paylasNot');
     const LINK = 'https://kafakelime.com/#' + KEY, kopyala = () => { try { navigator.clipboard.writeText(LINK).catch(() => {}); } catch (e) {} };
-    uyg.querySelector('#paylas').onclick = async () => { kopyala(); const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' });
+    uyg.querySelector('#paylas').onclick = async () => { olay('paylas/story/' + KEY); kopyala(); const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' });
       try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
       not.textContent = t('Bu tarayıcı doğrudan paylaşmaya izin vermiyor. Görsele basılı tutup kaydet, sonra story\'ne ekle.', 'This browser can\'t share directly. Press and hold the image to save it, then add it to your story.'); };
-    uyg.querySelector('#kopya').onclick = () => { kopyala(); not.textContent = t('Link kopyalandı. Story\'de Bağlantı çıkartmasına yapıştır.', 'Link copied. Paste it into a Link sticker.'); };
-    uyg.querySelector('#indir').onclick = async () => { kopyala(); if (MOBIL) { const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' }); try { if (navigator.canShare && navigator.canShare({ files: [f] })) { not.textContent = t('Listede “Görüntüyü Kaydet”i seç.', 'Choose “Save Image” in the list.'); await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; } }
+    uyg.querySelector('#kopya').onclick = () => { olay('paylas/link-kopya/' + KEY); kopyala(); not.textContent = t('Link kopyalandı. Story\'de Bağlantı çıkartmasına yapıştır.', 'Link copied. Paste it into a Link sticker.'); };
+    uyg.querySelector('#indir').onclick = async () => { olay('paylas/gorsel-kaydet/' + KEY); kopyala(); if (MOBIL) { const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' }); try { if (navigator.canShare && navigator.canShare({ files: [f] })) { not.textContent = t('Listede “Görüntüyü Kaydet”i seç.', 'Choose “Save Image” in the list.'); await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; } }
       const a = document.createElement('a'); a.href = url; a.download = K.kanal + '_sonuc.jpg'; document.body.append(a); a.click(); a.remove();
       not.textContent = t('İnmediyse görsele basılı tutup "Fotoğraflara kaydet"i seç.', 'If it didn\'t download, press and hold the image and choose "Save to Photos".'); };
   });
@@ -455,6 +474,7 @@ ${ARTS ? `<div class="bolum"><h3>2. Artikelini yaz: ${ARTS.length === 3 ? 'der, 
 <div class="bolum"><h3>${t('Cevap anahtarı', 'Answer key')}</h3><div class="cevap"><p><b>1.</b> ${A.map((w, i) => `${i + 1}) ${esc(w.tr)}`).join(' · ')}</p>${ARTS ? `<p><b>2.</b> ${B.map((w, i) => `${i + 1}) ${esc(w.art)}`).join(' · ')}</p>` : ''}<p><b>${n3}.</b> ${C.map((w, i) => `${i + 1}. ${t('resim', 'picture')}: ${'ABCDEF'[Cs.indexOf(w)]}`).join(' · ')}</p></div></div></div>`;
 }
 function baskiEkrani() {
+  olay('pdf-ekrani/' + KEY);
   let b = document.getElementById('baski'); if (!b) { b = document.createElement('div'); b.id = 'baski'; document.body.append(b); }
   b.innerHTML = baskiHtml();   // resimler şimdiden yüklensin
   ekran([
@@ -466,9 +486,10 @@ function baskiEkrani() {
     $(`<p class="alt" style="font-size:14px">${t('iPhone: Paylaş → “Dosyalara Kaydet”. Android: Yazıcı yerine “PDF olarak kaydet”. Bilgisayar: Hedef → “PDF olarak kaydet”.', 'iPhone: Share → “Save to Files”. Android: pick “Save as PDF” instead of a printer. Computer: Destination → “Save as PDF”.')}</p>`)
   ]);
   uyg.querySelector('.geri').onclick = menu;
-  const y = uyg.querySelector('#yazdir'); if (y) y.onclick = () => window.print();
+  const y = uyg.querySelector('#yazdir'); if (y) y.onclick = () => { olay('pdf-yazdir/' + KEY); window.print(); };
 }
 function listeEkrani() {
+  olay('kelime-listesi/' + KEY);
   ekran([
     $(`<div class="ust"><button class="geri" aria-label="${t('Menüye dön', 'Back to menu')}">←</button><span class="etiket">${W.length} ${t('kelime', 'words')}</span></div>`),
     $(`<h1>${t('Kelime <span class="vurgu">listesi</span>', 'Word <span class="vurgu">list</span>')}</h1>`),
@@ -479,7 +500,7 @@ function listeEkrani() {
   ciz(); uyg.querySelector('#ara').oninput = (e) => ciz(e.target.value); uyg.querySelector('.geri').onclick = menu;
 }
 /* ----------------------------------------------------------- yönlendirme */
-function yon() { const h = location.hash.slice(1); if (KANAL[h] && !KANAL[h].yakinda) dilAc(h).catch(() => ekran([$(`<div class="kart sonuc"><h2>Kelimeler yüklenemedi</h2><p class="alt">Bağlantını kontrol edip sayfayı yenile.</p></div>`)])); else girisEkrani(); }
+function yon() { const h = location.hash.slice(1); say('/' + h, h ? (KANAL[h] ? KANAL[h].ad : h) : 'Giriş'); if (KANAL[h] && !KANAL[h].yakinda) dilAc(h).catch(() => ekran([$(`<div class="kart sonuc"><h2>Kelimeler yüklenemedi</h2><p class="alt">Bağlantını kontrol edip sayfayı yenile.</p></div>`)])); else girisEkrani(); }
 const TARAYICI_SERIDI = false;   // Instagram içinde paylaşım ve ses çalışıyor; şerit istenirse true
 if (TARAYICI_SERIDI && UYGULAMA_ICI) { let kapali = false; try { kapali = sessionStorage.getItem('tarayici_kapali') === '1'; } catch (e) {}
   const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent), and = /Android/i.test(navigator.userAgent);
