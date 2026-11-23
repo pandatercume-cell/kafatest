@@ -157,7 +157,7 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 </style>
 
 <div class="sar" id="uyg" aria-live="polite"></div>
-<p style="text-align:center;font-size:12px;color:var(--soluk);margin:8px 16px 28px">© Kafa kanalları (@almancakafa · @ingilizce.kafa · @fransizcakafa). İçerik ve görseller izinsiz kullanılamaz.</p>
+<p id="altyazi" style="text-align:center;font-size:12px;color:var(--soluk);margin:8px 16px 28px">© Kafa kanalları (@almancakafa · @ingilizce.kafa · @fransizcakafa · @turkish_kafa). İçerik ve görseller izinsiz kullanılamaz.</p>
 
 <script>
 (() => {
@@ -166,8 +166,10 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 const KANAL = {
   almanca: { ad: 'Almanca', kanal: 'almancakafa', dosya: 'de/kelimeler.json', pdf: 'de/almancakafa_kelimeler.pdf', dil: 'Almancada', artikel: ['der', 'die', 'das'], harfEk: 'aeinrstlhgu', bayrak: ['#1E1B3A', '#E5484D', '#FFC533'] },
   ingilizce: { ad: 'İngilizce', kanal: 'ingilizce.kafa', dosya: 'en/kelimeler.json', pdf: 'en/ingilizcekafa_kelimeler.pdf', dil: 'İngilizcede', harfEk: 'aeiorstlnhd', bayrak: ['#2F6FE4', '#FFFFFF', '#E5484D'], yon: 'rows' },
-  fransizca: { ad: 'Fransızca', kanal: 'fransizcakafa', dosya: 'fr/kelimeler.json', pdf: 'fr/fransizcakafa_kelimeler.pdf', dil: 'Fransızcada', artikel: ['le', 'la'], harfEk: 'aeiorstlnuc', bayrak: ['#2F6FE4', '#FFFFFF', '#E5484D'], yon: 'columns' }
+  fransizca: { ad: 'Fransızca', kanal: 'fransizcakafa', dosya: 'fr/kelimeler.json', pdf: 'fr/fransizcakafa_kelimeler.pdf', dil: 'Fransızcada', artikel: ['le', 'la'], harfEk: 'aeiorstlnuc', bayrak: ['#2F6FE4', '#FFFFFF', '#E5484D'], yon: 'columns' },
+  turkce: { ad: 'Turkish', kanal: 'turkish_kafa', dosya: 'tk/kelimeler.json', dil: 'in Turkish', harfEk: 'aeıiklmnrsuçşü', en: true, ayri: true }
 };
+const t = (tr, en) => (K && K.en ? en : tr);   // Türkçe kanalı İngilizce arayüz
 const SITE = 'kafa kelime testi';
 const SORU_SAYISI = 10;
 /* ----------------------------------------------------------- yardımcılar */
@@ -182,9 +184,9 @@ const karistir = (a, r) => { a = a.slice(); for (let i = a.length - 1; i > 0; i-
 const depo = { oku(k, v) { try { const x = localStorage.getItem(k); return x ? JSON.parse(x) : v; } catch (e) { return v; } }, yaz(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 const reel = (w) => w.reel ? 'https://www.instagram.com/reel/' + w.reel + '/' : 'https://www.instagram.com/' + K.kanal + '/';
 const tamAd = (w) => (w.art ? w.art + (/'$/.test(w.art) ? '' : ' ') : '') + w.de;
-const SESDIL = { almanca: 'de-DE', ingilizce: 'en-US', fransizca: 'fr-FR' };
+const SESDIL = { almanca: 'de-DE', ingilizce: 'en-US', fransizca: 'fr-FR', turkce: 'tr-TR' };
 const SESVAR = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
-const sesBtn = (w) => SESVAR ? `<button class="ses" type="button" data-s="${esc(tamAd(w))}" aria-label="Dinle: ${esc(tamAd(w))}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a4.5 4.5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M18.5 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>` : '';
+const sesBtn = (w) => SESVAR ? `<button class="ses" type="button" data-s="${esc(tamAd(w))}" aria-label="${t('Dinle', 'Listen')}: ${esc(tamAd(w))}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a4.5 4.5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M18.5 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>` : '';
 function seslen(metin, btn) {
   if (!SESVAR) return; const dil = SESDIL[KEY] || 'en-US'; speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(metin); u.lang = dil; u.rate = 0.85;
@@ -205,19 +207,20 @@ function icerikHtml(w) {   // ses benzeri kısmı vurgula
 const uyg = document.getElementById('uyg');
 let K = null, KEY = null, W = [], test = null;
 const seriOku = () => depo.oku('seri_' + KEY, { son: '', gun: 0, enIyi: 0, bugunPuan: null });
-function ekran(html) { uyg.innerHTML = ''; uyg.append(...html); window.scrollTo(0, 0); }
+function ekran(html) { uyg.innerHTML = ''; uyg.append(...html); window.scrollTo(0, 0);
+  document.getElementById('altyazi').textContent = t('© Kafa kanalları (@almancakafa · @ingilizce.kafa · @fransizcakafa · @turkish_kafa). İçerik ve görseller izinsiz kullanılamaz.', '© Kafa channels (@turkish_kafa). Content and images may not be used without permission.'); }
 async function dilAc(key) {
-  KEY = key; K = KANAL[key];
+  KEY = key; K = KANAL[key]; document.documentElement.lang = K.en ? 'en' : 'tr';
   if (!K.veri) { const r = await fetch(K.dosya); K.veri = await r.json(); const kok = K.dosya.replace(/[^/]*$/, ''); K.veri.kelimeler.forEach((w) => { w.ikon = kok + w.ikon; }); }
   W = K.veri.kelimeler; menu();
 }
 /* ----------------------------------------------------------- ekranlar */
 function girisEkrani() {
-  KEY = null;
+  KEY = null; K = null; document.documentElement.lang = 'tr';
   ekran([
     $(`<div class="kart giris"><div><h1>Kafana<br><span class="vurgu">ne kaldı?</span></h1><p class="alt" style="margin:10px 0 22px">Videolarda öğrendiğin kelimelerle kendini dene.</p></div><img src="ortak/kafa_el.png" alt="Kafa el sallıyor"></div>`),
-    $(`<div class="dil-listesi">${Object.entries(KANAL).map(([k, d]) => `<button class="kart dil" data-dil="${k}" ${d.yakinda ? 'disabled' : ''}>${bayrak(d.bayrak, d.yon)}<span><b>${d.ad}</b><small>@${d.kanal}${d.yakinda ? ' · yakında' : ''}</small></span>${d.yakinda ? '' : '<span class="ok" aria-hidden="true">→</span>'}</button>`).join('')}</div>`),
-    $(`<a class="kart dil" lang="en" style="margin-top:26px;text-decoration:none;color:inherit" href="https://www.instagram.com/turkish_kafa/" target="_blank" rel="noopener"><svg class="bayrak" viewBox="5 0 20 20" aria-hidden="true"><rect width="30" height="20" fill="#E30A17"/><circle cx="11" cy="10" r="5" fill="#fff"/><circle cx="12.3" cy="10" r="4" fill="#E30A17"/><polygon fill="#fff" points="17.2,10 19.6,9.2 19.6,6.7 21.1,8.7 23.5,7.9 22,10 23.5,12.1 21.1,11.3 19.6,13.3 19.6,10.8"/></svg><span><b>Learning Turkish?</b><small>Learn Turkish words the fun way · @turkish_kafa</small></span><span class="ok" aria-hidden="true">→</span></a>`)
+    $(`<div class="dil-listesi">${Object.entries(KANAL).filter(([, d]) => !d.ayri).map(([k, d]) => `<button class="kart dil" data-dil="${k}" ${d.yakinda ? 'disabled' : ''}>${bayrak(d.bayrak, d.yon)}<span><b>${d.ad}</b><small>@${d.kanal}${d.yakinda ? ' · yakında' : ''}</small></span>${d.yakinda ? '' : '<span class="ok" aria-hidden="true">→</span>'}</button>`).join('')}</div>`),
+    $(`<button class="kart dil" lang="en" style="margin-top:26px" data-dil="turkce"><svg class="bayrak" viewBox="5 0 20 20" aria-hidden="true"><rect width="30" height="20" fill="#E30A17"/><circle cx="11" cy="10" r="5" fill="#fff"/><circle cx="12.3" cy="10" r="4" fill="#E30A17"/><polygon fill="#fff" points="17.2,10 19.6,9.2 19.6,6.7 21.1,8.7 23.5,7.9 22,10 23.5,12.1 21.1,11.3 19.6,13.3 19.6,10.8"/></svg><span><b>Learning Turkish?</b><small>Test the words from @turkish_kafa videos</small></span><span class="ok" aria-hidden="true">→</span></button>`)
   ]);
   uyg.querySelectorAll('[data-dil]').forEach((b) => b.onclick = () => { location.hash = b.dataset.dil; });
 }
@@ -225,11 +228,11 @@ function menu() {
   const s = seriOku(), bitti = s.son === bugun();
   const aktif = s.son === bugun() || s.son === dun() ? s.gun : 0;
   ekran([
-    $(`<div class="ust"><button class="geri" aria-label="Dil seçimine dön">←</button><a class="etiket" href="https://www.instagram.com/${K.kanal}/" target="_blank" rel="noopener">@${K.kanal}</a></div>`),
-    $(`<div><h1>${K.ad} <span class="vurgu">testi</span></h1><p class="alt" style="margin-top:6px">${W.length} kelime · hepsi @${K.kanal} videolarından</p></div>`),
-    $(`<div class="kart seri"><div class="alev">${aktif}</div><div><b>${aktif ? aktif + ' günlük seri' : 'Seriye bugün başla'}</b><p class="alt">${bitti ? 'Bugünün testi tamam: ' + s.bugunPuan + '/' + SORU_SAYISI + '. Yarın yeni sorular!' : 'Her gün 10 soru çöz, seriyi bozma.'}${s.enIyi > 1 ? ' En uzun serin: ' + s.enIyi + ' gün.' : ''}</p></div></div>`),
-    $(`<button class="kart buyuk ${bitti ? 'bitti' : ''}" id="gunluk"><b>${bitti ? 'Bugünün testini tekrar çöz' : 'Günün testi'}</b><span>10 soru · resim, harf, ${K.artikel ? 'artikel, ' : ''}eşleştirme</span></button>`),
-    $(`<div class="izgara2"><button class="kart kucuk" id="serbest"><b>Karışık test</b><small>Rastgele 10 soru</small></button><button class="kart kucuk" id="liste"><b>Kelime listesi</b><small>Videolarıyla</small></button><button class="kart kucuk" id="pdf"><b>PDF</b><small>Liste + basılı test</small></button><button class="kart kucuk" id="yeni"><b>Yeni kelimeler</b><small>Son 10 video</small></button></div>`)
+    $(`<div class="ust"><button class="geri" aria-label="${t('Dil seçimine dön', 'Back to languages')}">←</button><a class="etiket" href="https://www.instagram.com/${K.kanal}/" target="_blank" rel="noopener">@${K.kanal}</a></div>`),
+    $(`<div><h1>${K.ad} <span class="vurgu">${t('testi', 'quiz')}</span></h1><p class="alt" style="margin-top:6px">${W.length} ${t('kelime · hepsi @' + K.kanal + ' videolarından', 'words · all from @' + K.kanal + ' videos')}</p></div>`),
+    $(`<div class="kart seri"><div class="alev">${aktif}</div><div><b>${aktif ? aktif + t(' günlük seri', '-day streak') : t('Seriye bugün başla', 'Start your streak today')}</b><p class="alt">${bitti ? t('Bugünün testi tamam: ', 'Today\'s quiz done: ') + s.bugunPuan + '/' + SORU_SAYISI + t('. Yarın yeni sorular!', '. New questions tomorrow!') : t('Her gün 10 soru çöz, seriyi bozma.', 'Answer 10 questions a day, keep your streak.')}${s.enIyi > 1 ? t(' En uzun serin: ' + s.enIyi + ' gün.', ' Best streak: ' + s.enIyi + ' days.') : ''}</p></div></div>`),
+    $(`<button class="kart buyuk ${bitti ? 'bitti' : ''}" id="gunluk"><b>${bitti ? t('Bugünün testini tekrar çöz', 'Retake today\'s quiz') : t('Günün testi', 'Daily quiz')}</b><span>${t('10 soru · resim, harf, ' + (K.artikel ? 'artikel, ' : '') + 'eşleştirme', '10 questions · pictures, spelling, matching')}</span></button>`),
+    $(`<div class="izgara2"><button class="kart kucuk" id="serbest"><b>${t('Karışık test', 'Mixed quiz')}</b><small>${t('Rastgele 10 soru', '10 random questions')}</small></button><button class="kart kucuk" id="liste"><b>${t('Kelime listesi', 'Word list')}</b><small>${t('Videolarıyla', 'With videos')}</small></button><button class="kart kucuk" id="pdf"><b>PDF</b><small>${t('Liste + basılı test', 'List + printable test')}</small></button><button class="kart kucuk" id="yeni"><b>${t('Yeni kelimeler', 'New words')}</b><small>${t('Son 10 video', 'Last 10 videos')}</small></button></div>`)
   ]);
   uyg.querySelector('.geri').onclick = () => { location.hash = ''; };
   uyg.querySelector('#gunluk').onclick = () => basla('gunluk');
@@ -252,24 +255,24 @@ function basla(tur) {
 const celdirici = (w, n, r, f = (x) => x.tr) => { const g = new Set([f(w)]); const out = []; for (const x of karistir(W, r)) { if (out.length >= n) break; if (!g.has(f(x))) { g.add(f(x)); out.push(x); } } return out; };
 function soruGoster() {
   const q = test.Q[test.i], w = q.w, r = test.r;
-  const ust = $(`<div class="ust"><button class="geri" aria-label="Testten çık">×</button><div class="ilerleme" role="progressbar" aria-valuemin="0" aria-valuemax="${SORU_SAYISI}" aria-valuenow="${test.i}"><i style="width:${test.i / SORU_SAYISI * 100}%"></i></div><span class="etiket">${test.i + 1}/${SORU_SAYISI}</span></div>`);
+  const ust = $(`<div class="ust"><button class="geri" aria-label="${t('Testten çık', 'Quit quiz')}">×</button><div class="ilerleme" role="progressbar" aria-valuemin="0" aria-valuemax="${SORU_SAYISI}" aria-valuenow="${test.i}"><i style="width:${test.i / SORU_SAYISI * 100}%"></i></div><span class="etiket">${test.i + 1}/${SORU_SAYISI}</span></div>`);
   ust.querySelector('.geri').onclick = menu;
   const govde = [];
   if (q.tur === 'resim') {
     const s = karistir([w, ...celdirici(w, 3, r, (x) => x.ikon)], r);
-    govde.push($(`<div class="kart soru"><span class="soru-tip">Hangi resim?</span><div class="kelime">${artCip(w)}<span>${esc(w.de)}</span>${sesBtn(w)}</div></div>`));
+    govde.push($(`<div class="kart soru"><span class="soru-tip">${t('Hangi resim?', 'Which picture?')}</span><div class="kelime">${artCip(w)}<span>${esc(w.de)}</span>${sesBtn(w)}</div></div>`));
     govde.push(secenekler(s.map((x) => ({ x, html: `<img src="${x.ikon}" alt="">`, sinif: 'resim', etiket: x.tr })), w, (x) => x === w));
   } else if (q.tur === 'anlam') {
     const s = karistir([w, ...celdirici(w, 3, r)], r);
-    govde.push($(`<div class="kart soru"><span class="soru-tip">Ne demek?</span><div class="kelime">${artCip(w)}<span>${esc(w.de)}</span>${sesBtn(w)}</div></div>`));
+    govde.push($(`<div class="kart soru"><span class="soru-tip">${t('Ne demek?', 'What does it mean?')}</span><div class="kelime">${artCip(w)}<span>${esc(w.de)}</span>${sesBtn(w)}</div></div>`));
     govde.push(secenekler(s.map((x) => ({ x, html: esc(x.tr) })), w, (x) => x === w));
   } else if (q.tur === 'ters') {
     const s = karistir([w, ...celdirici(w, 3, r, (x) => x.de)], r);
-    govde.push($(`<div class="kart soru"><span class="soru-tip">${K.dil} nasıl denir?</span><img class="ikon" src="${w.ikon}" alt=""><div class="anlam">${esc(w.tr)}</div></div>`));
+    govde.push($(`<div class="kart soru"><span class="soru-tip">${t(K.dil + ' nasıl denir?', 'How do you say it in Turkish?')}</span><img class="ikon" src="${w.ikon}" alt=""><div class="anlam">${esc(w.tr)}</div></div>`));
     govde.push(secenekler(s.map((x) => ({ x, html: esc(tamAd(x)) })), w, (x) => x === w));
   } else if (q.tur === 'icerik') {
     const s = karistir([w, ...celdirici(w, 3, r, (x) => x.de)], r);
-    govde.push($(`<div class="kart soru"><span class="soru-tip">Bu cümle hangi kelimeyi hatırlatıyor?</span><div class="icerik">${icerikHtml(w)}</div></div>`));
+    govde.push($(`<div class="kart soru"><span class="soru-tip">${t('Bu cümle hangi kelimeyi hatırlatıyor?', 'Which word does this sentence remind you of?')}</span><div class="icerik">${icerikHtml(w)}</div></div>`));
     govde.push(secenekler(s.map((x) => ({ x, html: esc(tamAd(x)) })), w, (x) => x === w));
   } else if (q.tur === 'artikel') {
     govde.push($(`<div class="kart soru"><span class="soru-tip">Artikeli hangisi?</span><img class="ikon" src="${w.ikon}" alt=""><div class="kelime"><span>___ ${esc(w.de)}</span></div><p class="alt">${esc(w.tr)}</p></div>`));
@@ -289,7 +292,7 @@ function secenekler(ops, w, dogruMu) {
 function harfSoru(w, r) {
   const hedef = [...w.de], ek = karistir([...K.harfEk].filter((h) => !kucuk(w.de).includes(h)), r).slice(0, Math.min(3, Math.max(1, 9 - hedef.length)));
   const taslar = karistir([...hedef.map(kucuk), ...ek], r);
-  const kart = $(`<div class="kart soru"><span class="soru-tip">Harfleri diz</span><img class="ikon" src="${w.ikon}" alt=""><div class="anlam">${artCip(w)} ${esc(w.tr)}</div><div class="yuvalar">${hedef.map(() => '<button class="yuva" aria-label="boş"></button>').join('')}</div></div>`);
+  const kart = $(`<div class="kart soru"><span class="soru-tip">${t('Harfleri diz', 'Spell the word')}</span><img class="ikon" src="${w.ikon}" alt=""><div class="anlam">${artCip(w)} ${esc(w.tr)}</div><div class="yuvalar">${hedef.map(() => `<button class="yuva" aria-label="${t('boş', 'empty')}"></button>`).join('')}</div></div>`);
   const ts = $(`<div class="taslar">${taslar.map((h, i) => `<button class="tas" data-i="${i}">${esc(h)}</button>`).join('')}</div>`);
   const yuv = [...kart.querySelectorAll('.yuva')], dol = [];
   const ciz = () => yuv.forEach((y, i) => { const d = dol[i]; y.textContent = d ? (i === 0 ? d.h.toLocaleUpperCase('de') === hedef[0] ? hedef[0] : d.h : d.h) : ''; y.classList.toggle('dolu', !!d); });
@@ -305,22 +308,22 @@ function harfSoru(w, r) {
 }
 function eslesSoru(w, r) {
   const grup = karistir([w, ...celdirici(w, 3, r)], r), sag = karistir(grup, r); let hata = 0, sec = null, tamam = 0;
-  const kart = $(`<div class="kart soru"><span class="soru-tip">Eşleştir</span><p class="alt">Önce resme, sonra kelimesine dokun.</p></div>`);
+  const kart = $(`<div class="kart soru"><span class="soru-tip">${t('Eşleştir', 'Match')}</span><p class="alt">${t('Önce resme, sonra kelimesine dokun.', 'Tap a picture, then its word.')}</p></div>`);
   const iz = $(`<div class="esles"></div>`);
   grup.forEach((x, i) => { iz.append($(`<button class="secenek" data-y="s" data-k="${i}" aria-label="${esc(x.tr)}"><img src="${x.ikon}" alt=""></button>`)); iz.append($(`<button class="secenek" data-y="d" data-k="${grup.indexOf(sag[i])}">${esc(tamAd(sag[i]))}</button>`)); });
   iz.querySelectorAll('.secenek').forEach((b) => b.onclick = () => {
     if (b.classList.contains('tamam') || iz.dataset.bitti) return;
     if (!sec || sec.dataset.y === b.dataset.y) { if (sec) sec.classList.remove('secili'); sec = b; b.classList.add('secili'); return; }
     if (sec.dataset.k === b.dataset.k) { [sec, b].forEach((x) => { x.classList.remove('secili'); x.classList.add('tamam', 'zipla'); }); tamam++; sec = null;
-      if (tamam === 4) { iz.dataset.bitti = 1; sonuclandir(hata === 0, w, hata ? hata + ' yanlış eşleştirme yaptın.' : null); } }
+      if (tamam === 4) { iz.dataset.bitti = 1; sonuclandir(hata === 0, w, hata ? hata + t(' yanlış eşleştirme yaptın.', ' wrong match' + (hata > 1 ? 'es.' : '.')) : null); } }
     else { hata++; const a = sec; [a, b].forEach((x) => { x.classList.add('sallan'); setTimeout(() => x.classList.remove('sallan', 'secili'), 400); }); sec = null; } });
   return [kart, iz];
 }
 function sonuclandir(ok, w, not) {
   if (ok) test.dogru++; else test.yanlislar.push(w);
-  const dogruMesaj = ['Süper!', 'Kafana kazındı!', 'Aynen böyle!', 'Bildin!'][Math.floor(test.r() * 4)];
-  const b = $(`<div class="kart bildirim ${ok ? 'd' : 'y'}"><img src="ortak/kafa_${ok ? 'el' : 'uzg'}.png" alt=""><div><b>${ok ? dogruMesaj : 'Olmadı'}</b><p>${not ? esc(not) + ' ' : ''}<strong>${esc(tamAd(w))}</strong>${sesBtn(w)} = ${esc(w.tr)}</p><p>${icerikHtml(w)}</p>${ok ? '' : `<p><a class="video" href="${reel(w)}" target="_blank" rel="noopener">Videosunu izle ↗</a></p>`}</div></div>`);
-  const d = $(`<button class="devam">${test.i + 1 < SORU_SAYISI ? 'Devam' : 'Sonucu gör'}</button>`);
+  const dogruMesaj = (K.en ? ['Great!', 'Nailed it!', 'Exactly!', 'You got it!'] : ['Süper!', 'Kafana kazındı!', 'Aynen böyle!', 'Bildin!'])[Math.floor(test.r() * 4)];
+  const b = $(`<div class="kart bildirim ${ok ? 'd' : 'y'}"><img src="ortak/kafa_${ok ? 'el' : 'uzg'}.png" alt=""><div><b>${ok ? dogruMesaj : t('Olmadı', 'Not quite')}</b><p>${not ? esc(not) + ' ' : ''}<strong>${esc(tamAd(w))}</strong>${sesBtn(w)} = ${esc(w.tr)}</p><p>${icerikHtml(w)}</p>${w.not ? `<p class="alt">${esc(w.not)}</p>` : ''}${ok ? '' : `<p><a class="video" href="${reel(w)}" target="_blank" rel="noopener">${t('Videosunu izle', 'Watch the video')} ↗</a></p>`}</div></div>`);
+  const d = $(`<button class="devam">${test.i + 1 < SORU_SAYISI ? t('Devam', 'Next') : t('Sonucu gör', 'See result')}</button>`);
   d.onclick = () => { test.i++; test.i < SORU_SAYISI ? soruGoster() : sonucEkrani(); };
   uyg.append(b, d); d.scrollIntoView({ behavior: 'smooth', block: 'end' }); d.focus({ preventScroll: true });
 }
@@ -328,23 +331,24 @@ function sonuclandir(ok, w, not) {
 function sonucEkrani() {
   const p = test.dogru; let s = seriOku();
   if (test.tur === 'gunluk') { const t = bugun(); if (s.son !== t) { s.gun = s.son === dun() ? s.gun + 1 : 1; s.son = t; s.enIyi = Math.max(s.enIyi, s.gun); } s.bugunPuan = p; depo.yaz('seri_' + KEY, s); }
-  const mesaj = p === 10 ? 'Kusursuz! Kafan tam kelime deposu.' : p >= 8 ? 'Çok iyi! Birkaç kelime daha, tamamdır.' : p >= 5 ? 'Fena değil. Yanlışların videolarına bir bak.' : 'Isınma turuydu. Videoları izleyip tekrar dene.';
+  const mesaj = K.en ? (p === 10 ? 'Perfect! Your head is a word bank.' : p >= 8 ? 'Very good! Just a few more words.' : p >= 5 ? 'Not bad. Watch the videos of your mistakes.' : 'That was a warm-up. Watch the videos and try again.')
+    : p === 10 ? 'Kusursuz! Kafan tam kelime deposu.' : p >= 8 ? 'Çok iyi! Birkaç kelime daha, tamamdır.' : p >= 5 ? 'Fena değil. Yanlışların videolarına bir bak.' : 'Isınma turuydu. Videoları izleyip tekrar dene.';
   const yanlis = test.yanlislar.filter((w, i, a) => a.indexOf(w) === i);
   ekran([
-    $(`<div class="ust"><button class="geri" aria-label="Menüye dön">←</button><span class="etiket">@${K.kanal}</span></div>`),
-    $(`<div class="kart sonuc"><img class="kafa" src="ortak/kafa_${p >= 5 ? 'el' : 'dus'}.png" alt=""><div class="puan">${p}/${SORU_SAYISI}</div><h2>${mesaj}</h2>${test.tur === 'gunluk' ? `<p class="alt">${s.gun} günlük seri · yarın yeni 10 soru</p>` : ''}</div>`),
-    $(`<div class="kart sonuc"><h2>Story'de paylaş</h2><img class="story" id="story" alt="Story sonuç kartı"><div class="satir-btn"><button class="ana" id="paylas">Paylaş</button><button id="indir">Görseli kaydet</button></div><p class="not" id="paylasNot">Paylaşırken @${K.kanal} hesabını etiketle!</p></div>`),
-    ...(yanlis.length ? [$(`<div class="kart" style="padding:16px 14px"><h2 style="margin:0 4px 10px">Tekrar et</h2><div class="liste">${yanlis.map(ogeHtml).join('')}</div></div>`)] : []),
-    $(`<div class="satir-btn"><button id="tekrar">Yeni test</button><button class="ana" id="menu">Menü</button></div>`)
+    $(`<div class="ust"><button class="geri" aria-label="${t('Menüye dön', 'Back to menu')}">←</button><span class="etiket">@${K.kanal}</span></div>`),
+    $(`<div class="kart sonuc"><img class="kafa" src="ortak/kafa_${p >= 5 ? 'el' : 'dus'}.png" alt=""><div class="puan">${p}/${SORU_SAYISI}</div><h2>${mesaj}</h2>${test.tur === 'gunluk' ? `<p class="alt">${s.gun}${t(' günlük seri · yarın yeni 10 soru', '-day streak · 10 new questions tomorrow')}</p>` : ''}</div>`),
+    $(`<div class="kart sonuc"><h2>${t('Story\'de paylaş', 'Share to your story')}</h2><img class="story" id="story" alt="${t('Story sonuç kartı', 'Story result card')}"><div class="satir-btn"><button class="ana" id="paylas">${t('Paylaş', 'Share')}</button><button id="indir">${t('Görseli kaydet', 'Save image')}</button></div><p class="not" id="paylasNot">${t('Paylaşırken @' + K.kanal + ' hesabını etiketle!', 'Tag @' + K.kanal + ' when you share!')}</p></div>`),
+    ...(yanlis.length ? [$(`<div class="kart" style="padding:16px 14px"><h2 style="margin:0 4px 10px">${t('Tekrar et', 'Review')}</h2><div class="liste">${yanlis.map(ogeHtml).join('')}</div></div>`)] : []),
+    $(`<div class="satir-btn"><button id="tekrar">${t('Yeni test', 'New quiz')}</button><button class="ana" id="menu">${t('Menü', 'Menu')}</button></div>`)
   ]);
   uyg.querySelector('.geri').onclick = menu; uyg.querySelector('#menu').onclick = menu; uyg.querySelector('#tekrar').onclick = () => basla('serbest');
   storyCiz(p, s).then((blob) => {
     const url = URL.createObjectURL(blob); uyg.querySelector('#story').src = url; const not = uyg.querySelector('#paylasNot');
     uyg.querySelector('#paylas').onclick = async () => { const f = new File([blob], K.kanal + '_sonuc.png', { type: 'image/png' });
-      try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: K.ad + ' testi' }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
-      not.textContent = 'Bu tarayıcı doğrudan paylaşmaya izin vermiyor. Görsele basılı tutup kaydet, sonra story\'ne ekle.'; };
+      try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: K.ad + t(' testi', ' quiz') }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+      not.textContent = t('Bu tarayıcı doğrudan paylaşmaya izin vermiyor. Görsele basılı tutup kaydet, sonra story\'ne ekle.', 'This browser can\'t share directly. Press and hold the image to save it, then add it to your story.'); };
     uyg.querySelector('#indir').onclick = () => { const a = document.createElement('a'); a.href = url; a.download = K.kanal + '_sonuc.png'; document.body.append(a); a.click(); a.remove();
-      not.textContent = 'İnmediyse görsele basılı tutup "Fotoğraflara kaydet"i seç.'; };
+      not.textContent = t('İnmediyse görsele basılı tutup "Fotoğraflara kaydet"i seç.', 'If it didn\'t download, press and hold the image and choose "Save to Photos".'); };
   });
 }
 function resim(src) { return new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = src; }); }
@@ -356,17 +360,17 @@ async function storyCiz(p, s) {
   const kart = (X, Y, W2, H2, r, f) => { x.fillStyle = '#1E1B3A'; x.beginPath(); x.roundRect(X, Y + 14, W2, H2, r); x.fill(); x.fillStyle = f; x.beginPath(); x.roundRect(X, Y, W2, H2, r); x.fill(); x.lineWidth = 8; x.strokeStyle = '#1E1B3A'; x.stroke(); };
   const yazi = (t, X, Y, px, w, f, sw = 0) => { x.font = F(w, px); x.textAlign = 'center'; x.textBaseline = 'middle'; if (sw) { x.lineJoin = 'round'; x.lineWidth = sw * .7; x.strokeStyle = '#1E1B3A'; x.strokeText(t, X, Y); } x.fillStyle = f; x.fillText(t, X, Y); };
   kart(290, 150, 500, 96, 48, '#FFFFFF'); yazi('@' + K.kanal, 540, 200, 46, 800, '#1E1B3A');
-  yazi(test.tur === 'gunluk' ? 'GÜNÜN TESTİ' : K.ad.toLocaleUpperCase('tr') + ' TESTİ', 540, 360, 64, 800, '#FFFFFF', 18);
+  yazi(test.tur === 'gunluk' ? t('GÜNÜN TESTİ', 'DAILY QUIZ') : K.en ? 'TURKISH QUIZ' : K.ad.toLocaleUpperCase('tr') + ' TESTİ', 540, 360, 64, 800, '#FFFFFF', 18);
   kart(120, 440, 840, 560, 70, '#FFFDF6');
   yazi(p + '/' + SORU_SAYISI, 540, 640, 260, 800, '#6B4EE6');
-  yazi(p === 10 ? 'Kusursuz!' : p >= 8 ? 'Kafam çalışıyor!' : p >= 5 ? 'Fena değil!' : 'Isınıyorum!', 540, 860, 76, 800, '#1E1B3A');
-  if (test.tur === 'gunluk' && s.gun) { kart(330, 1060, 420, 110, 55, '#FFC533'); yazi(s.gun + ' günlük seri', 540, 1116, 52, 800, '#1E1B3A'); }
+  yazi(K.en ? (p === 10 ? 'Perfect!' : p >= 8 ? 'My head works!' : p >= 5 ? 'Not bad!' : 'Warming up!') : p === 10 ? 'Kusursuz!' : p >= 8 ? 'Kafam çalışıyor!' : p >= 5 ? 'Fena değil!' : 'Isınıyorum!', 540, 860, 76, 800, '#1E1B3A');
+  if (test.tur === 'gunluk' && s.gun) { kart(330, 1060, 420, 110, 55, '#FFC533'); yazi(s.gun + t(' günlük seri', '-day streak'), 540, 1116, 52, 800, '#1E1B3A'); }
   const kafa = await resim('ortak/kafa_' + (p >= 5 ? 'el' : 'dus') + '.png'); if (kafa) { const h = 520, w2 = kafa.width * h / kafa.height; x.drawImage(kafa, 540 - w2 / 2, 1220, w2, h); }
-  kart(160, 1770, 760, 100, 50, '#6B4EE6'); yazi('Sen kaç yaparsın?', 540, 1822, 52, 800, '#FFFFFF');
+  kart(160, 1770, 760, 100, 50, '#6B4EE6'); yazi(t('Sen kaç yaparsın?', 'Can you beat me?'), 540, 1822, 52, 800, '#FFFFFF');
   return new Promise((ok) => c.toBlob(ok, 'image/png'));
 }
 /* ----------------------------------------------------------- kelime listesi */
-function ogeHtml(w) { return `<div class="kart liste-ogesi"><img src="${w.ikon}" alt="" loading="lazy"><div><b>${artCip(w)}${esc(w.de)}${sesBtn(w)}<span class="alt" style="font-size:16px">= ${esc(w.tr)}</span></b><p>${icerikHtml(w)}</p><a class="video" href="${reel(w)}" target="_blank" rel="noopener">Videosunu izle ↗</a></div></div>`; }
+function ogeHtml(w) { return `<div class="kart liste-ogesi"><img src="${w.ikon}" alt="" loading="lazy"><div><b>${artCip(w)}${esc(w.de)}${sesBtn(w)}<span class="alt" style="font-size:16px">= ${esc(w.tr)}</span></b><p>${icerikHtml(w)}</p>${w.not ? `<p class="alt" style="font-size:14px">${esc(w.not)}</p>` : ''}<a class="video" href="${reel(w)}" target="_blank" rel="noopener">${t('Videosunu izle', 'Watch the video')} ↗</a></div></div>`; }
 /* ----------------------------------------------------------- basılı sürüm (tarayıcının "PDF olarak kaydet"i) */
 const UYGULAMA_ICI = /Instagram|FBAN|FBAV|FB_IAB|Line\/|TikTok|musical_ly|Bytedance/i.test(navigator.userAgent);
 function baskiHtml() {
@@ -374,38 +378,38 @@ function baskiHtml() {
   const ad = (w) => (w.art ? `<i class="a ${w.art.replace(/'/g, '')}">${esc(w.art)}</i> ` : '') + esc(w.de);
   const ARTS = K.artikel, isimler = W.filter((w) => ARTS && ARTS.includes(w.art));
   const A = karis(W).slice(0, 14), B = karis(isimler).slice(0, 14), C = karis(W).slice(0, 6), Cs = karis(C);
-  const tarih = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+  const tarih = new Date().toLocaleDateString(K.en ? 'en-GB' : 'tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
   const n3 = ARTS ? 3 : 2;
-  return `<div class="bust"><div><h1>${esc(K.ad)} <span>kelimelerim</span></h1><small>@${K.kanal} videolarındaki ${W.length} kelime · ${tarih}</small></div><small>Altı sarı olan ses benzerliği aklında tutmanı sağlar.</small></div>
+  return `<div class="bust"><div><h1>${t(esc(K.ad) + ' <span>kelimelerim</span>', 'My Turkish <span>words</span>')}</h1><small>${t('@' + K.kanal + ' videolarındaki ' + W.length + ' kelime', W.length + ' words from @' + K.kanal + ' videos')} · ${tarih}</small></div><small>${t('Altı sarı olan ses benzerliği aklında tutmanı sağlar.', 'The yellow sound-alike helps you remember.')}</small></div>
 <div class="bliste">${W.map((w) => `<div class="bk"><img src="${w.ikon}" alt=""><div><b>${ad(w)}</b> <span style="color:#6B6785">= ${esc(w.tr)}</span><p>${icerikHtml(w)}</p></div></div>`).join('')}</div>
-<div class="sayfa"><div class="bust"><div><h1>Basılı <span>test</span></h1><small>@${K.kanal} · ${tarih}</small></div><small>Ad: ______________________</small></div>
-<div class="bolum"><h3>1. Türkçesini yaz</h3><div class="sat">${A.map((w, i) => `<div>${i + 1}. ${ad(w)} <span class="cizgi"></span></div>`).join('')}</div></div>
+<div class="sayfa"><div class="bust"><div><h1>${t('Basılı <span>test</span>', 'Printable <span>test</span>')}</h1><small>@${K.kanal} · ${tarih}</small></div><small>${t('Ad', 'Name')}: ______________________</small></div>
+<div class="bolum"><h3>1. ${t('Türkçesini yaz', 'Write the meaning in English')}</h3><div class="sat">${A.map((w, i) => `<div>${i + 1}. ${ad(w)} <span class="cizgi"></span></div>`).join('')}</div></div>
 ${ARTS ? `<div class="bolum"><h3>2. Artikelini yaz: ${ARTS.length === 3 ? 'der, die ya da das' : 'le ya da la'}</h3><div class="sat">${B.map((w, i) => `<div>${i + 1}. <span class="cizgi" style="flex:0 0 14mm"></span> ${esc(w.de)} <small class="not">(${esc(w.tr)})</small></div>`).join('')}</div></div>` : ''}
-<div class="bolum"><h3>${n3}. Resimle eşleştir: harfi kutuya yaz</h3><div class="es">${C.map((w, i) => `<div><div class="kutu"></div><img src="${w.ikon}" alt=""></div><div>${'ABCDEF'[i]}) ${ad(Cs[i])}</div>`).join('')}</div></div>
-<div class="bolum"><h3>Cevap anahtarı</h3><div class="cevap"><p><b>1.</b> ${A.map((w, i) => `${i + 1}) ${esc(w.tr)}`).join(' · ')}</p>${ARTS ? `<p><b>2.</b> ${B.map((w, i) => `${i + 1}) ${esc(w.art)}`).join(' · ')}</p>` : ''}<p><b>${n3}.</b> ${C.map((w, i) => `${i + 1}. resim: ${'ABCDEF'[Cs.indexOf(w)]}`).join(' · ')}</p></div></div></div>`;
+<div class="bolum"><h3>${n3}. ${t('Resimle eşleştir: harfi kutuya yaz', 'Match with the picture: write the letter in the box')}</h3><div class="es">${C.map((w, i) => `<div><div class="kutu"></div><img src="${w.ikon}" alt=""></div><div>${'ABCDEF'[i]}) ${ad(Cs[i])}</div>`).join('')}</div></div>
+<div class="bolum"><h3>${t('Cevap anahtarı', 'Answer key')}</h3><div class="cevap"><p><b>1.</b> ${A.map((w, i) => `${i + 1}) ${esc(w.tr)}`).join(' · ')}</p>${ARTS ? `<p><b>2.</b> ${B.map((w, i) => `${i + 1}) ${esc(w.art)}`).join(' · ')}</p>` : ''}<p><b>${n3}.</b> ${C.map((w, i) => `${i + 1}. ${t('resim', 'picture')}: ${'ABCDEF'[Cs.indexOf(w)]}`).join(' · ')}</p></div></div></div>`;
 }
 function baskiEkrani() {
   let b = document.getElementById('baski'); if (!b) { b = document.createElement('div'); b.id = 'baski'; document.body.append(b); }
   b.innerHTML = baskiHtml();   // resimler şimdiden yüklensin
   ekran([
-    $(`<div class="ust"><button class="geri" aria-label="Menüye dön">←</button><span class="etiket">${W.length} kelime</span></div>`),
-    $(`<div><h1>Basılı <span class="vurgu">sürüm</span></h1><p class="alt" style="margin-top:6px">Kelime listesi + basılı test + cevap anahtarı. Her açışta yeni sorular, hep güncel.</p></div>`),
+    $(`<div class="ust"><button class="geri" aria-label="${t('Menüye dön', 'Back to menu')}">←</button><span class="etiket">${W.length} ${t('kelime', 'words')}</span></div>`),
+    $(`<div><h1>${t('Basılı <span class="vurgu">sürüm</span>', 'Printable <span class="vurgu">version</span>')}</h1><p class="alt" style="margin-top:6px">${t('Kelime listesi + basılı test + cevap anahtarı. Her açışta yeni sorular, hep güncel.', 'Word list + printable test + answer key. New questions every time, always up to date.')}</p></div>`),
     UYGULAMA_ICI
-      ? $(`<div class="uyari-kutu"><b>Instagram içinden açtın.</b><br>Instagram'ın tarayıcısı PDF kaydetmeye izin vermiyor. Sağ üstteki <b>•••</b> menüsüne dokun, <b>"Tarayıcıda aç"</b> de, sonra bu düğmeye tekrar bas.</div>`)
-      : $(`<button class="kart buyuk" id="yazdir"><b>PDF olarak kaydet / Yazdır</b><span>Açılan ekranda “PDF olarak kaydet”i seç</span></button>`),
-    $(`<p class="alt" style="font-size:14px">iPhone: Paylaş → “Dosyalara Kaydet”. Android: Yazıcı yerine “PDF olarak kaydet”. Bilgisayar: Hedef → “PDF olarak kaydet”.</p>`)
+      ? $(`<div class="uyari-kutu">${t(`<b>Instagram içinden açtın.</b><br>Instagram'ın tarayıcısı PDF kaydetmeye izin vermiyor. Sağ üstteki <b>•••</b> menüsüne dokun, <b>"Tarayıcıda aç"</b> de, sonra bu düğmeye tekrar bas.`, `<b>You opened this inside Instagram.</b><br>Instagram's browser can't save PDFs. Tap <b>•••</b> at the top right, choose <b>"Open in browser"</b>, then tap this button again.`)}</div>`)
+      : $(`<button class="kart buyuk" id="yazdir"><b>${t('PDF olarak kaydet / Yazdır', 'Save as PDF / Print')}</b><span>${t('Açılan ekranda “PDF olarak kaydet”i seç', 'Choose “Save as PDF” on the next screen')}</span></button>`),
+    $(`<p class="alt" style="font-size:14px">${t('iPhone: Paylaş → “Dosyalara Kaydet”. Android: Yazıcı yerine “PDF olarak kaydet”. Bilgisayar: Hedef → “PDF olarak kaydet”.', 'iPhone: Share → “Save to Files”. Android: pick “Save as PDF” instead of a printer. Computer: Destination → “Save as PDF”.')}</p>`)
   ]);
   uyg.querySelector('.geri').onclick = menu;
   const y = uyg.querySelector('#yazdir'); if (y) y.onclick = () => window.print();
 }
 function listeEkrani() {
   ekran([
-    $(`<div class="ust"><button class="geri" aria-label="Menüye dön">←</button><span class="etiket">${W.length} kelime</span></div>`),
-    $(`<h1>Kelime <span class="vurgu">listesi</span></h1>`),
-    $(`<input class="ara" id="ara" type="search" placeholder="Kelime ara…" aria-label="Kelime ara">`),
+    $(`<div class="ust"><button class="geri" aria-label="${t('Menüye dön', 'Back to menu')}">←</button><span class="etiket">${W.length} ${t('kelime', 'words')}</span></div>`),
+    $(`<h1>${t('Kelime <span class="vurgu">listesi</span>', 'Word <span class="vurgu">list</span>')}</h1>`),
+    $(`<input class="ara" id="ara" type="search" placeholder="${t('Kelime ara…', 'Search words…')}" aria-label="${t('Kelime ara', 'Search words')}">`),
     $(`<div class="liste" id="lst"></div>`)
   ]);
-  const lst = uyg.querySelector('#lst'), ciz = (q) => { const k = kucuk(q || ''); lst.innerHTML = W.slice().reverse().filter((w) => !k || kucuk(w.de + ' ' + w.tr + ' ' + w.icerik).includes(k)).map(ogeHtml).join('') || '<p class="not">Bu kelime henüz videolarda yok.</p>'; };
+  const lst = uyg.querySelector('#lst'), ciz = (q) => { const k = kucuk(q || ''); lst.innerHTML = W.slice().reverse().filter((w) => !k || kucuk(w.de + ' ' + w.tr + ' ' + w.icerik).includes(k)).map(ogeHtml).join('') || `<p class="not">${t('Bu kelime henüz videolarda yok.', 'This word isn\'t in the videos yet.')}</p>`; };
   ciz(); uyg.querySelector('#ara').oninput = (e) => ciz(e.target.value); uyg.querySelector('.geri').onclick = menu;
 }
 /* ----------------------------------------------------------- yönlendirme */
