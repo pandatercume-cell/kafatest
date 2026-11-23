@@ -130,6 +130,13 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 .ses svg { width: 22px; height: 22px } .ses.caliyor { background: var(--sari, #FFC533) }
 .liste-ogesi .ses, .bildirim .ses { width: 34px; height: 34px; margin-left: 6px } .liste-ogesi .ses svg, .bildirim .ses svg { width: 17px; height: 17px }
 #baski { display: none }
+.kart.diger { padding: 18px 16px } .kart.diger h2 { margin: 0 0 2px; font-size: 22px }
+.diger-liste { display: grid; gap: 10px; margin-top: 12px }
+.diger-oge { display: flex; align-items: center; gap: 12px } .diger-oge .bayrak { width: 40px; height: 40px }
+.diger-oge > div { flex: 1; min-width: 0 } .diger-oge b { display: block; font-size: 17px } .diger-oge small { color: var(--soluk); font-size: 13px } .diger-oge small a { color: var(--mor); font-weight: 700 }
+.diger-oge button, .kart.oneri button { font: inherit; font-weight: 800; font-size: 14px; padding: 9px 13px; border-radius: 99px; border: 2.5px solid var(--cizgi); background: var(--kart); color: var(--murekkep); box-shadow: 0 3px 0 var(--cizgi); cursor: pointer; white-space: nowrap }
+.kart.oneri { display: flex; align-items: center; gap: 12px; flex-wrap: wrap } .kart.oneri > div { flex: 1; min-width: 160px } .kart.oneri .bayrak { width: 46px; height: 46px }
+.kart.oneri b { font-size: 18px } .kart.oneri p { margin: 2px 0 0; font-size: 14px } .kart.oneri button.ana { background: var(--mor); color: #fff }
 .uyari-kutu { border: 2.5px dashed var(--cizgi); border-radius: 18px; padding: 14px 16px; font-size: 15px; background: var(--kart) }
 @media print {
   @page { size: A4; margin: 13mm 12mm }
@@ -214,6 +221,22 @@ async function dilAc(key) {
   if (!K.veri) { const r = await fetch(K.dosya); K.veri = await r.json(); const kok = K.dosya.replace(/[^/]*$/, ''); K.veri.kelimeler.forEach((w) => { w.ikon = kok + w.ikon; }); }
   W = K.veri.kelimeler; menu();
 }
+/* ----------------------------------------------------------- diğer kanallar (çapraz tanıtım) */
+const TK_BAYRAK = `<svg class="bayrak" viewBox="5 0 20 20" aria-hidden="true"><rect width="30" height="20" fill="#E30A17"/><circle cx="11" cy="10" r="5" fill="#fff"/><circle cx="12.3" cy="10" r="4" fill="#E30A17"/><polygon fill="#fff" points="17.2,10 19.6,9.2 19.6,6.7 21.1,8.7 23.5,7.9 22,10 23.5,12.1 21.1,11.3 19.6,13.3 19.6,10.8"/></svg>`;
+const digerleri = () => Object.entries(KANAL).filter(([k, d]) => k !== KEY && !d.ayri);
+function digerDiller() {
+  if (K.en) return null;
+  const k = $(`<div class="kart diger"><h2>Diğer dillerimiz</h2><p class="alt">Aynı kafayla başka bir dil öğren.</p><div class="diger-liste">${digerleri().map(([k, d]) => `<div class="diger-oge">${bayrak(d.bayrak, d.yon)}<div><b>${d.ad}</b><small><a href="https://www.instagram.com/${d.kanal}/" target="_blank" rel="noopener">@${d.kanal}</a></small></div><button data-git="${k}">Teste git</button></div>`).join('')}<div class="diger-oge">${TK_BAYRAK}<div><b>Türkçe</b><small>Türkçe öğrenen yabancı arkadaşına öner: <a href="https://www.instagram.com/turkish_kafa/" target="_blank" rel="noopener">@turkish_kafa</a></small></div></div></div></div>`);
+  k.querySelectorAll('[data-git]').forEach((b) => b.onclick = () => { location.hash = b.dataset.git; });
+  return k;
+}
+function digerOneri() {
+  if (K.en) return null;
+  const l = digerleri(); const [k, d] = l[Math.floor(Math.random() * l.length)];
+  const c = $(`<div class="kart diger oneri">${bayrak(d.bayrak, d.yon)}<div><b>${d.ad} ${/[eiöü][^aeıioöuü]*$/i.test(d.ad) ? 'de' : 'da'} öğreniyor musun?</b><p class="alt">@${d.kanal} videolarındaki kelimelerle kendini dene.</p></div><button class="ana" data-git="${k}">${d.ad} testi →</button></div>`);
+  c.querySelector('[data-git]').onclick = () => { location.hash = k; };
+  return c;
+}
 /* ----------------------------------------------------------- ekranlar */
 function girisEkrani() {
   KEY = null; K = null; document.documentElement.lang = 'tr';
@@ -232,7 +255,8 @@ function menu() {
     $(`<div><h1>${K.ad} <span class="vurgu">${t('testi', 'quiz')}</span></h1><p class="alt" style="margin-top:6px">${W.length} ${t('kelime · hepsi @' + K.kanal + ' videolarından', 'words · all from @' + K.kanal + ' videos')}</p></div>`),
     $(`<div class="kart seri"><div class="alev">${aktif}</div><div><b>${aktif ? aktif + t(' günlük seri', '-day streak') : t('Seriye bugün başla', 'Start your streak today')}</b><p class="alt">${bitti ? t('Bugünün testi tamam: ', 'Today\'s quiz done: ') + s.bugunPuan + '/' + SORU_SAYISI + t('. Yarın yeni sorular!', '. New questions tomorrow!') : t('Her gün 10 soru çöz, seriyi bozma.', 'Answer 10 questions a day, keep your streak.')}${s.enIyi > 1 ? t(' En uzun serin: ' + s.enIyi + ' gün.', ' Best streak: ' + s.enIyi + ' days.') : ''}</p></div></div>`),
     $(`<button class="kart buyuk ${bitti ? 'bitti' : ''}" id="gunluk"><b>${bitti ? t('Bugünün testini tekrar çöz', 'Retake today\'s quiz') : t('Günün testi', 'Daily quiz')}</b><span>${t('10 soru · resim, harf, ' + (K.artikel ? 'artikel, ' : '') + 'eşleştirme', '10 questions · pictures, spelling, matching')}</span></button>`),
-    $(`<div class="izgara2"><button class="kart kucuk" id="serbest"><b>${t('Karışık test', 'Mixed quiz')}</b><small>${t('Rastgele 10 soru', '10 random questions')}</small></button><button class="kart kucuk" id="liste"><b>${t('Kelime listesi', 'Word list')}</b><small>${t('Videolarıyla', 'With videos')}</small></button><button class="kart kucuk" id="pdf"><b>PDF</b><small>${t('Liste + basılı test', 'List + printable test')}</small></button><button class="kart kucuk" id="yeni"><b>${t('Yeni kelimeler', 'New words')}</b><small>${t('Son 10 video', 'Last 10 videos')}</small></button></div>`)
+    $(`<div class="izgara2"><button class="kart kucuk" id="serbest"><b>${t('Karışık test', 'Mixed quiz')}</b><small>${t('Rastgele 10 soru', '10 random questions')}</small></button><button class="kart kucuk" id="liste"><b>${t('Kelime listesi', 'Word list')}</b><small>${t('Videolarıyla', 'With videos')}</small></button><button class="kart kucuk" id="pdf"><b>PDF</b><small>${t('Liste + basılı test', 'List + printable test')}</small></button><button class="kart kucuk" id="yeni"><b>${t('Yeni kelimeler', 'New words')}</b><small>${t('Son 10 video', 'Last 10 videos')}</small></button></div>`),
+    ...[digerDiller()].filter(Boolean)
   ]);
   uyg.querySelector('.geri').onclick = () => { location.hash = ''; };
   uyg.querySelector('#gunluk').onclick = () => basla('gunluk');
@@ -338,6 +362,7 @@ function sonucEkrani() {
     $(`<div class="ust"><button class="geri" aria-label="${t('Menüye dön', 'Back to menu')}">←</button><span class="etiket">@${K.kanal}</span></div>`),
     $(`<div class="kart sonuc"><img class="kafa" src="ortak/kafa_${p >= 5 ? 'el' : 'dus'}.png" alt=""><div class="puan">${p}/${SORU_SAYISI}</div><h2>${mesaj}</h2>${test.tur === 'gunluk' ? `<p class="alt">${s.gun}${t(' günlük seri · yarın yeni 10 soru', '-day streak · 10 new questions tomorrow')}</p>` : ''}</div>`),
     $(`<div class="kart sonuc"><h2>${t('Story\'de paylaş', 'Share to your story')}</h2><img class="story" id="story" alt="${t('Story sonuç kartı', 'Story result card')}"><div class="satir-btn"><button class="ana" id="paylas">${t('Paylaş', 'Share')}</button><button id="indir">${t('Görseli kaydet', 'Save image')}</button></div><p class="not" id="paylasNot">${t('Paylaşırken @' + K.kanal + ' hesabını etiketle!', 'Tag @' + K.kanal + ' when you share!')}</p></div>`),
+    ...[digerOneri()].filter(Boolean),
     ...(yanlis.length ? [$(`<div class="kart" style="padding:16px 14px"><h2 style="margin:0 4px 10px">${t('Tekrar et', 'Review')}</h2><div class="liste">${yanlis.map(ogeHtml).join('')}</div></div>`)] : []),
     $(`<div class="satir-btn"><button id="tekrar">${t('Yeni test', 'New quiz')}</button><button class="ana" id="menu">${t('Menü', 'Menu')}</button></div>`)
   ]);
