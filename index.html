@@ -119,7 +119,7 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 .sonuc { padding: 22px 18px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px }
 .puan { font-size: 76px; font-weight: 800; line-height: 1; color: var(--mor) }
 .sonuc img.kafa { width: 120px }
-.story { width: 100%; max-width: 280px; border-radius: 18px; border: 3px solid var(--kenar); box-shadow: var(--golge) }
+.story { width: 100%; max-width: 190px; border-radius: 18px; border: 3px solid var(--kenar); box-shadow: var(--golge) }
 .satir-btn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100% }
 .satir-btn button, .satir-btn a { padding: 13px; border-radius: 16px; border: 3px solid var(--kenar); background: var(--kart); box-shadow: 0 4px 0 var(--cizgi); font-weight: 800; font-size: 16px; text-align: center; text-decoration: none; color: var(--murekkep) }
 .satir-btn .ana { background: var(--mor); color: #fff }
@@ -163,6 +163,11 @@ button.kart:active, .satir-btn button:active, .satir-btn a:active, .devam:active
 .satir-btn button, .satir-btn a { display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; padding: 13px 8px; font-size: 15.5px }
 .satir-btn .ikn { width: 19px; height: 19px }
 .diger-oge button { background: var(--mor); color: #fff }
+.kopya { font: inherit; font-weight: 800; font-size: 14px; padding: 9px 14px; border-radius: 99px; border: 2.5px dashed var(--kenar); background: var(--mor-acik); color: var(--murekkep); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+#tarayici { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 10px max(12px, env(safe-area-inset-left, 0px)); background: #1E1B3A; color: #fff; border-bottom: 3px solid #FFC533 }
+#tarayici[hidden] { display: none } #tarayici > div { flex: 1; min-width: 0 } #tarayici b { display: block; font-size: 15px } #tarayici span { display: block; font-size: 12.5px; opacity: .85; line-height: 1.3 }
+#tarayici a { background: #FFC533; color: #1E1B3A; font-weight: 800; font-size: 14px; padding: 9px 12px; border-radius: 99px; text-decoration: none; white-space: nowrap; border: 2.5px solid #000 }
+#tarayici button { background: none; border: 0; color: #fff; font-size: 24px; padding: 0 4px; line-height: 1 }
 .adim { font-size: 14px; color: var(--soluk); font-weight: 600; margin: 2px 0 0; text-align: left; width: 100% } .adim b { color: var(--murekkep) }
 @media print {
   @page { size: A4; margin: 13mm 12mm }
@@ -189,6 +194,7 @@ button.kart:active, .satir-btn button:active, .satir-btn a:active, .devam:active
 @media (prefers-reduced-motion: reduce) { .sallan, .zipla { animation: none } .ilerleme i { transition: none } }
 </style>
 
+<div id="tarayici" hidden></div>
 <div class="sar" id="uyg" aria-live="polite"></div>
 <p id="altyazi" style="text-align:center;font-size:12px;color:var(--soluk);margin:8px 16px 28px">© Kafa kanalları (@almancakafa · @ingilizce.kafa · @fransizcakafa · @turkish_kafa). İçerik ve görseller izinsiz kullanılamaz.</p>
 
@@ -240,7 +246,7 @@ function icerikHtml(w) {   // ses benzeri kısmı vurgula
 const uyg = document.getElementById('uyg');
 let K = null, KEY = null, W = [], test = null;
 const seriOku = () => depo.oku('seri_' + KEY, { son: '', gun: 0, enIyi: 0, bugunPuan: null });
-function ekran(html) { uyg.innerHTML = ''; uyg.append(...html); window.scrollTo(0, 0);
+function ekran(html) { uyg.innerHTML = ''; uyg.append(...html); window.scrollTo(0, 0); document.getElementById('altyazi').hidden = !!uyg.querySelector('.ilerleme');
   document.getElementById('altyazi').textContent = t('© Kafa kanalları (@almancakafa · @ingilizce.kafa · @fransizcakafa · @turkish_kafa). İçerik ve görseller izinsiz kullanılamaz.', '© Kafa channels (@turkish_kafa). Content and images may not be used without permission.'); }
 async function dilAc(key) {
   KEY = key; K = KANAL[key]; document.documentElement.lang = K.en ? 'en' : 'tr';
@@ -392,7 +398,7 @@ function sonucEkrani() {
   ekran([
     $(`<div class="ust"><button class="geri" aria-label="${t('Menüye dön', 'Back to menu')}">←</button><span class="etiket">@${K.kanal}</span></div>`),
     $(`<div class="kart sonuc"><img class="kafa" src="ortak/kafa_${p >= 5 ? 'el' : 'dus'}.png" alt=""><div class="puan">${p}/${SORU_SAYISI}</div><h2>${mesaj}</h2>${test.tur === 'gunluk' ? `<p class="alt">${s.gun}${t(' günlük seri · yarın yeni 10 soru', '-day streak · 10 new questions tomorrow')}</p>` : ''}</div>`),
-    $(`<div class="kart sonuc"><h2>${t('Story\'de paylaş', 'Share to your story')}</h2><img class="story" id="story" alt="${t('Story sonuç kartı', 'Story result card')}"><button class="ig-btn" id="paylas">${IKON.paylas}${t('Instagram Story\'de paylaş', 'Share to Instagram Story')}</button><p class="adim">${t('<b>1.</b> Açılan listede <b>Instagram</b>\'ı seç → <b>Story</b>. Görünmüyorsa listeyi sağa kaydır.<br><b>2.</b> Yine yoksa <b>“Görüntüyü Kaydet”</b> de, sonra aşağıdan <b>Instagram\'ı aç</b> ve Story\'ye galeriden ekle.', '<b>1.</b> In the list that opens, pick <b>Instagram</b> → <b>Story</b>. Swipe the list if you don\'t see it.<br><b>2.</b> Still not there? Choose <b>“Save Image”</b>, then tap <b>Open Instagram</b> below and add it from your gallery.')}</p><div class="satir-btn">${MOBIL ? `<a href="instagram://story-camera" id="igac">${IKON.kamera}${t('Instagram\'ı aç', 'Open Instagram')}</a>` : ''}<button id="indir" ${MOBIL ? '' : 'style="grid-column:1/-1"'}>${IKON.indir}${t('Görseli kaydet', 'Save image')}</button></div><p class="not" id="paylasNot">${t('Paylaşırken @' + K.kanal + ' hesabını etiketle!', 'Tag @' + K.kanal + ' when you share!')}</p></div>`),
+    $(`<div class="kart sonuc"><h2>${t('Story\'de paylaş', 'Share to your story')}</h2><img class="story" id="story" alt="${t('Story sonuç kartı', 'Story result card')}"><button class="ig-btn" id="paylas">${IKON.paylas}${t('Instagram Story\'de paylaş', 'Share to Instagram Story')}</button><p class="adim">${t('<b>1.</b> Açılan listede <b>Instagram</b> → <b>Hikaye</b>\'yi seç. Görünmüyorsa listeyi sağa kaydır ya da <b>“Görüntüyü Kaydet”</b> de, aşağıdan <b>Instagram\'ı aç</b>.<br><b>2.</b> Test linki panoya kopyalandı: Story\'de çıkartma → <b>Bağlantı</b> → yapıştır. Arkadaşların dokununca teste gelir.<br><b>3.</b> <b>@' + K.kanal + '</b> hesabını etiketle!', '<b>1.</b> Pick <b>Instagram</b> → <b>Story</b> in the list. Not there? Choose <b>“Save Image”</b>, then tap <b>Open Instagram</b> below.<br><b>2.</b> The quiz link is copied: in your story tap stickers → <b>Link</b> → paste. Friends can tap it to take the quiz.<br><b>3.</b> Tag <b>@' + K.kanal + '</b>!')}</p><div class="satir-btn">${MOBIL ? `<a href="instagram://story-camera" id="igac">${IKON.kamera}${t('Instagram\'ı aç', 'Open Instagram')}</a>` : ''}<button id="indir" ${MOBIL ? '' : 'style="grid-column:1/-1"'}>${IKON.indir}${t('Görseli kaydet', 'Save image')}</button></div><button class="kopya" id="kopya">${t('Linki kopyala', 'Copy link')}: kafakelime.com/#${KEY}</button><p class="not" id="paylasNot"></p></div>`),
     ...[digerOneri()].filter(Boolean),
     ...(yanlis.length ? [$(`<div class="kart" style="padding:16px 14px"><h2 style="margin:0 4px 10px">${t('Tekrar et', 'Review')}</h2><div class="liste">${yanlis.map(ogeHtml).join('')}</div></div>`)] : []),
     $(`<div class="satir-btn"><button id="tekrar">${t('Yeni test', 'New quiz')}</button><button class="ana" id="menu">${t('Menü', 'Menu')}</button></div>`)
@@ -400,10 +406,12 @@ function sonucEkrani() {
   uyg.querySelector('.geri').onclick = menu; uyg.querySelector('#menu').onclick = menu; uyg.querySelector('#tekrar').onclick = () => basla('serbest');
   storyCiz(p, s).then((blob) => {
     const url = URL.createObjectURL(blob); uyg.querySelector('#story').src = url; const not = uyg.querySelector('#paylasNot');
-    uyg.querySelector('#paylas').onclick = async () => { const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' });
+    const LINK = 'https://kafakelime.com/#' + KEY, kopyala = () => { try { navigator.clipboard.writeText(LINK).catch(() => {}); } catch (e) {} };
+    uyg.querySelector('#paylas').onclick = async () => { kopyala(); const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' });
       try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
       not.textContent = t('Bu tarayıcı doğrudan paylaşmaya izin vermiyor. Görsele basılı tutup kaydet, sonra story\'ne ekle.', 'This browser can\'t share directly. Press and hold the image to save it, then add it to your story.'); };
-    uyg.querySelector('#indir').onclick = async () => { if (MOBIL) { const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' }); try { if (navigator.canShare && navigator.canShare({ files: [f] })) { not.textContent = t('Listede “Görüntüyü Kaydet”i seç.', 'Choose “Save Image” in the list.'); await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; } }
+    uyg.querySelector('#kopya').onclick = () => { kopyala(); not.textContent = t('Link kopyalandı. Story\'de Bağlantı çıkartmasına yapıştır.', 'Link copied. Paste it into a Link sticker.'); };
+    uyg.querySelector('#indir').onclick = async () => { kopyala(); if (MOBIL) { const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' }); try { if (navigator.canShare && navigator.canShare({ files: [f] })) { not.textContent = t('Listede “Görüntüyü Kaydet”i seç.', 'Choose “Save Image” in the list.'); await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; } }
       const a = document.createElement('a'); a.href = url; a.download = K.kanal + '_sonuc.jpg'; document.body.append(a); a.click(); a.remove();
       not.textContent = t('İnmediyse görsele basılı tutup "Fotoğraflara kaydet"i seç.', 'If it didn\'t download, press and hold the image and choose "Save to Photos".'); };
   });
@@ -416,14 +424,15 @@ async function storyCiz(p, s) {
   x.save(); x.translate(540, -150); for (let i = 0; i < 40; i++) { if (i % 2) continue; x.beginPath(); x.moveTo(0, 0); x.arc(0, 0, 2600, i * Math.PI / 20, (i + 1) * Math.PI / 20); x.closePath(); x.fillStyle = 'rgba(255,255,255,.35)'; x.fill(); } x.restore();
   const kart = (X, Y, W2, H2, r, f) => { x.fillStyle = '#1E1B3A'; x.beginPath(); x.roundRect(X, Y + 14, W2, H2, r); x.fill(); x.fillStyle = f; x.beginPath(); x.roundRect(X, Y, W2, H2, r); x.fill(); x.lineWidth = 8; x.strokeStyle = '#1E1B3A'; x.stroke(); };
   const yazi = (t, X, Y, px, w, f, sw = 0) => { x.font = F(w, px); x.textAlign = 'center'; x.textBaseline = 'middle'; if (sw) { x.lineJoin = 'round'; x.lineWidth = sw * .7; x.strokeStyle = '#1E1B3A'; x.strokeText(t, X, Y); } x.fillStyle = f; x.fillText(t, X, Y); };
-  kart(290, 150, 500, 96, 48, '#FFFFFF'); yazi('@' + K.kanal, 540, 200, 46, 800, '#1E1B3A');
-  yazi(test.tur === 'gunluk' ? t('GÜNÜN TESTİ', 'DAILY QUIZ') : K.en ? 'TURKISH QUIZ' : K.ad.toLocaleUpperCase('tr') + ' TESTİ', 540, 360, 64, 800, '#FFFFFF', 18);
-  kart(120, 440, 840, 560, 70, '#FFFDF6');
-  yazi(p + '/' + SORU_SAYISI, 540, 640, 260, 800, '#6B4EE6');
-  yazi(K.en ? (p === 10 ? 'Perfect!' : p >= 8 ? 'My head works!' : p >= 5 ? 'Not bad!' : 'Warming up!') : p === 10 ? 'Kusursuz!' : p >= 8 ? 'Kafam çalışıyor!' : p >= 5 ? 'Fena değil!' : 'Isınıyorum!', 540, 860, 76, 800, '#1E1B3A');
-  if (test.tur === 'gunluk' && s.gun) { kart(330, 1060, 420, 110, 55, '#FFC533'); yazi(s.gun + t(' günlük seri', '-day streak'), 540, 1116, 52, 800, '#1E1B3A'); }
-  const kafa = await resim('ortak/kafa_' + (p >= 5 ? 'el' : 'dus') + '.png'); if (kafa) { const h = 520, w2 = kafa.width * h / kafa.height; x.drawImage(kafa, 540 - w2 / 2, 1220, w2, h); }
-  kart(160, 1770, 760, 100, 50, '#6B4EE6'); yazi(t('Sen kaç yaparsın?', 'Can you beat me?'), 540, 1822, 52, 800, '#FFFFFF');
+  kart(290, 230, 500, 96, 48, '#FFFFFF'); yazi('@' + K.kanal, 540, 280, 46, 800, '#1E1B3A');
+  yazi(test.tur === 'gunluk' ? t('GÜNÜN TESTİ', 'DAILY QUIZ') : K.en ? 'TURKISH QUIZ' : K.ad.toLocaleUpperCase('tr') + ' TESTİ', 540, 430, 64, 800, '#FFFFFF', 18);
+  kart(120, 500, 840, 520, 70, '#FFFDF6');
+  yazi(p + '/' + SORU_SAYISI, 540, 690, 250, 800, '#6B4EE6');
+  yazi(K.en ? (p === 10 ? 'Perfect!' : p >= 8 ? 'My head works!' : p >= 5 ? 'Not bad!' : 'Warming up!') : p === 10 ? 'Kusursuz!' : p >= 8 ? 'Kafam çalışıyor!' : p >= 5 ? 'Fena değil!' : 'Isınıyorum!', 540, 905, 76, 800, '#1E1B3A');
+  if (test.tur === 'gunluk' && s.gun) { kart(330, 1070, 420, 104, 52, '#FFC533'); yazi(s.gun + t(' günlük seri', '-day streak'), 540, 1123, 50, 800, '#1E1B3A'); }
+  const kafa = await resim('ortak/kafa_' + (p >= 5 ? 'el' : 'dus') + '.png'); if (kafa) { const h = 370, w2 = kafa.width * h / kafa.height; x.drawImage(kafa, 540 - w2 / 2, 1215, w2, h); }
+  yazi(t('Sen kaç yaparsın?', 'Can you beat me?'), 540, 1638, 58, 800, '#1E1B3A');
+  kart(190, 1684, 700, 104, 52, '#6B4EE6'); yazi('kafakelime.com', 540, 1738, 60, 800, '#FFFFFF');
   return new Promise((ok) => c.toBlob(ok, 'image/jpeg', 0.93));
 }
 /* ----------------------------------------------------------- kelime listesi */
@@ -471,6 +480,14 @@ function listeEkrani() {
 }
 /* ----------------------------------------------------------- yönlendirme */
 function yon() { const h = location.hash.slice(1); if (KANAL[h] && !KANAL[h].yakinda) dilAc(h).catch(() => ekran([$(`<div class="kart sonuc"><h2>Kelimeler yüklenemedi</h2><p class="alt">Bağlantını kontrol edip sayfayı yenile.</p></div>`)])); else girisEkrani(); }
+const TARAYICI_SERIDI = false;   // Instagram içinde paylaşım ve ses çalışıyor; şerit istenirse true
+if (TARAYICI_SERIDI && UYGULAMA_ICI) { let kapali = false; try { kapali = sessionStorage.getItem('tarayici_kapali') === '1'; } catch (e) {}
+  const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent), and = /Android/i.test(navigator.userAgent);
+  const bant = document.getElementById('tarayici');
+  if (!kapali && (ios || and)) { const ac = () => ios ? 'x-safari-' + location.href : 'intent://' + location.host + location.pathname + location.search + location.hash + '#Intent;scheme=https;end';
+    bant.hidden = false; bant.innerHTML = `<div><b>Instagram içindesin</b><span>Ses ve paylaşım tarayıcıda daha iyi çalışır · Works better in your browser</span></div><a id="tarAc" href="#">Tarayıcıda aç</a><button aria-label="Kapat">×</button>`;
+    bant.querySelector('#tarAc').onclick = (e) => { e.preventDefault(); location.href = ac(); setTimeout(() => { bant.querySelector('span').textContent = 'Açılmadıysa: sağ üstteki ••• → “Tarayıcıda aç” · If not: ••• → “Open in browser”'; }, 1500); };
+    bant.querySelector('button').onclick = () => { bant.hidden = true; try { sessionStorage.setItem('tarayici_kapali', '1'); } catch (e) {} }; } }
 window.addEventListener('hashchange', yon); yon();
 })();
 </script>
