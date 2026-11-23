@@ -20,16 +20,16 @@
   --dogru: #2FA36B; --dogru-acik: #DDF5E8; --yanlis: #E5484D; --yanlis-acik: #FDE3E3;
   --der: #2F6FE4; --die: #E5484D; --das: #2FA36B;
   --f-ust: "Bricolage Grotesque", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
-  --golge: 0 5px 0 var(--cizgi);
+  --golge: 0 5px 0 var(--cizgi); --kenar: #1E1B3A;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --zemin: #1A1733; --zemin2: #231F45; --isin: rgba(255,255,255,.035);
   --kart: #2A2650; --murekkep: #F4F1FF; --soluk: #B3ADD6; --cizgi: #0C0A1F;
-  --mor: #8D74FF; --mor-acik: #35306A; --dogru-acik: #1D3B33; --yanlis-acik: #46222E; color-scheme: dark } }
+  --mor: #8D74FF; --mor-acik: #35306A; --kenar: #6A60BE; --dogru-acik: #1D3B33; --yanlis-acik: #46222E; color-scheme: dark } }
 :root[data-theme="dark"] {
   --zemin: #1A1733; --zemin2: #231F45; --isin: rgba(255,255,255,.035);
   --kart: #2A2650; --murekkep: #F4F1FF; --soluk: #B3ADD6; --cizgi: #0C0A1F;
-  --mor: #8D74FF; --mor-acik: #35306A; --dogru-acik: #1D3B33; --yanlis-acik: #46222E; color-scheme: dark }
+  --mor: #8D74FF; --mor-acik: #35306A; --kenar: #6A60BE; --dogru-acik: #1D3B33; --yanlis-acik: #46222E; color-scheme: dark }
 * { box-sizing: border-box }
 html, body { min-height: 100% }
 body { margin: 0; background: var(--zemin); color: var(--murekkep); font-family: var(--f-ust); font-size: 17px; line-height: 1.4;
@@ -38,10 +38,10 @@ body { margin: 0; background: var(--zemin); color: var(--murekkep); font-family:
 .sar { max-width: 520px; margin: 0 auto; padding-block: 18px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 18px }
 button { font: inherit; color: inherit; cursor: pointer }
 button:focus-visible, a:focus-visible { outline: 3px solid var(--mor); outline-offset: 3px }
-.kart { background: var(--kart); border: 3px solid var(--cizgi); border-radius: 26px; box-shadow: var(--golge) }
+.kart { background: var(--kart); border: 3px solid var(--kenar); border-radius: 26px; box-shadow: var(--golge) }
 .ust { display: flex; align-items: center; justify-content: space-between; gap: 10px }
-.etiket { display: inline-flex; align-items: center; gap: 6px; background: var(--kart); border: 2.5px solid var(--cizgi); border-radius: 99px; padding: 5px 12px; font-weight: 700; font-size: 14px; box-shadow: 0 3px 0 var(--cizgi); color: var(--murekkep); text-decoration: none }
-.geri { width: 44px; height: 44px; border-radius: 50%; border: 2.5px solid var(--cizgi); background: var(--kart); box-shadow: 0 3px 0 var(--cizgi); font-weight: 800; font-size: 20px; display: grid; place-items: center }
+.etiket { display: inline-flex; align-items: center; gap: 6px; background: var(--kart); border: 2.5px solid var(--kenar); border-radius: 99px; padding: 5px 12px; font-weight: 700; font-size: 14px; box-shadow: 0 3px 0 var(--cizgi); color: var(--murekkep); text-decoration: none }
+.geri { width: 44px; height: 44px; border-radius: 50%; border: 2.5px solid var(--kenar); background: var(--kart); box-shadow: 0 3px 0 var(--cizgi); font-weight: 800; font-size: 20px; display: grid; place-items: center }
 h1 { font-size: clamp(32px, 9vw, 44px); line-height: 1.02; margin: 0; font-weight: 800; letter-spacing: -.01em; text-wrap: balance }
 h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 .alt { color: var(--soluk); font-weight: 500; margin: 0 }
@@ -53,12 +53,12 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 .dil { display: flex; align-items: center; gap: 14px; padding: 16px 18px; text-align: left; width: 100% }
 .dil b { font-size: 22px; display: block }
 .dil small { color: var(--soluk); font-weight: 500; font-size: 14px }
-.bayrak { width: 46px; height: 46px; border-radius: 50%; border: 2.5px solid var(--cizgi); flex: none; overflow: hidden; display: grid }
+.bayrak { width: 46px; height: 46px; border-radius: 50%; border: 2.5px solid var(--kenar); flex: none; overflow: hidden; display: grid }
 .dil[disabled] { opacity: .55; cursor: not-allowed }
 .dil .ok { margin-left: auto; font-weight: 800; font-size: 22px }
 /* --- ana menü --- */
 .seri { display: flex; align-items: center; gap: 14px; padding: 16px 18px }
-.alev { width: 54px; height: 54px; border-radius: 16px; background: var(--sari); border: 2.5px solid var(--cizgi); display: grid; place-items: center; font-weight: 800; font-size: 24px; color: #1E1B3A; flex: none }
+.alev { width: 54px; height: 54px; border-radius: 16px; background: var(--sari); border: 2.5px solid var(--kenar); display: grid; place-items: center; font-weight: 800; font-size: 24px; color: #1E1B3A; flex: none }
 .seri b { font-size: 20px }
 .buyuk { display: flex; flex-direction: column; gap: 6px; padding: 20px; text-align: left; width: 100%; background: var(--mor); color: #fff }
 .buyuk b { font-size: 26px }
@@ -69,22 +69,22 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 .kucuk b { font-size: 18px }
 .kucuk small { color: var(--soluk); font-weight: 500; font-size: 14px }
 /* --- soru --- */
-.ilerleme { flex: 1; height: 16px; border-radius: 99px; border: 2.5px solid var(--cizgi); background: var(--kart); overflow: hidden }
-.ilerleme i { display: block; height: 100%; background: var(--sari); border-right: 2.5px solid var(--cizgi); transition: width .3s }
+.ilerleme { flex: 1; height: 16px; border-radius: 99px; border: 2.5px solid var(--kenar); background: var(--kart); overflow: hidden }
+.ilerleme i { display: block; height: 100%; background: var(--sari); border-right: 2.5px solid var(--kenar); transition: width .3s }
 .soru { padding: 18px 18px 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center }
 .soru-tip { font-size: 14px; font-weight: 700; color: var(--soluk); letter-spacing: .04em; text-transform: uppercase }
-.ikon { width: 132px; height: 132px; border-radius: 50%; border: 3px solid var(--cizgi); box-shadow: 0 5px 0 var(--cizgi); background: #fff; object-fit: cover }
+.ikon { width: 132px; height: 132px; border-radius: 50%; border: 3px solid var(--kenar); box-shadow: 0 5px 0 var(--cizgi); background: #fff; object-fit: cover }
 .kelime { font-size: clamp(40px, 12vw, 56px); font-weight: 800; line-height: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; color: var(--mor) }
-.art { font-size: 18px; font-weight: 800; color: #fff; padding: 4px 12px; border-radius: 99px; border: 2.5px solid var(--cizgi) }
+.art { font-size: 18px; font-weight: 800; color: #fff; padding: 4px 12px; border-radius: 99px; border: 2.5px solid var(--kenar) }
 .art.der, .art.le { background: var(--der) } .art.die, .art.la { background: var(--die) } .art.das, .art.les { background: var(--das) } .art { background: var(--mor) }
 .anlam { font-size: 28px; font-weight: 800 }
 .icerik { font-size: 22px; font-weight: 700; line-height: 1.3; text-wrap: balance }
 .icerik mark, .bildirim mark, .liste-ogesi mark { background: var(--sari); color: #1E1B3A; border-radius: 6px; padding: 0; box-shadow: 0 0 0 2px var(--sari); box-decoration-break: clone; -webkit-box-decoration-break: clone }
 .secenekler { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
-.secenek { min-height: 64px; padding: 12px; border-radius: 20px; border: 3px solid var(--cizgi); background: var(--kart); box-shadow: 0 4px 0 var(--cizgi); font-weight: 800; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform .08s }
+.secenek { min-height: 64px; padding: 12px; border-radius: 20px; border: 3px solid var(--kenar); background: var(--kart); box-shadow: 0 4px 0 var(--cizgi); font-weight: 800; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform .08s }
 .secenek:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--cizgi) }
 .secenek.resim { padding: 10px; aspect-ratio: 1 }
-.secenek.resim img { width: 100%; max-width: 150px; border-radius: 50%; border: 2.5px solid var(--cizgi) }
+.secenek.resim img { width: 100%; max-width: 150px; border-radius: 50%; border: 2.5px solid var(--kenar) }
 .secenek.dogru { background: var(--dogru); color: #fff } .secenek.yanlis { background: var(--yanlis); color: #fff }
 .secenek.soluk { opacity: .45 }
 .secenekler.art3 { grid-template-columns: repeat(3, 1fr) }
@@ -99,12 +99,12 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 .yuva.dolu { border-style: solid; border-color: var(--cizgi); background: var(--kart); box-shadow: 0 3px 0 var(--cizgi) }
 .yuvalar.dogru .yuva { background: var(--dogru); color: #fff } .yuvalar.yanlis .yuva { background: var(--yanlis); color: #fff }
 .taslar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center }
-.tas { width: 50px; height: 54px; border-radius: 14px; border: 3px solid var(--cizgi); background: var(--sari); color: #1E1B3A; box-shadow: 0 4px 0 var(--cizgi); font-size: 26px; font-weight: 800 }
+.tas { width: 50px; height: 54px; border-radius: 14px; border: 3px solid var(--kenar); background: var(--sari); color: #1E1B3A; box-shadow: 0 4px 0 var(--cizgi); font-size: 26px; font-weight: 800 }
 .tas[disabled] { visibility: hidden }
 /* eşleştir */
 .esles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
 .esles .secenek { min-height: 78px; font-size: 19px }
-.esles .secenek img { width: 62px; height: 62px; border-radius: 50%; border: 2.5px solid var(--cizgi) }
+.esles .secenek img { width: 62px; height: 62px; border-radius: 50%; border: 2.5px solid var(--kenar) }
 .esles .secenek.secili { background: var(--mor-acik); outline: 3px solid var(--mor) }
 .esles .secenek.tamam { background: var(--dogru-acik); opacity: .7 }
 /* geri bildirim */
@@ -113,27 +113,27 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 .bildirim.d { background: var(--dogru-acik) } .bildirim.y { background: var(--yanlis-acik) }
 .bildirim b { font-size: 20px; display: block }
 .bildirim p { margin: 2px 0 0; font-weight: 500 }
-.devam { width: 100%; padding: 16px; border-radius: 20px; border: 3px solid var(--cizgi); background: var(--murekkep); color: var(--zemin); font-weight: 800; font-size: 20px; box-shadow: var(--golge) }
+.devam { width: 100%; padding: 16px; border-radius: 20px; border: 3px solid var(--kenar); background: var(--murekkep); color: var(--zemin); font-weight: 800; font-size: 20px; box-shadow: var(--golge) }
 .video { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--mor); text-decoration: none; border-bottom: 2px solid currentColor }
 /* sonuç */
 .sonuc { padding: 22px 18px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px }
 .puan { font-size: 76px; font-weight: 800; line-height: 1; color: var(--mor) }
 .sonuc img.kafa { width: 120px }
-.story { width: 100%; max-width: 280px; border-radius: 18px; border: 3px solid var(--cizgi); box-shadow: var(--golge) }
+.story { width: 100%; max-width: 280px; border-radius: 18px; border: 3px solid var(--kenar); box-shadow: var(--golge) }
 .satir-btn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100% }
-.satir-btn button, .satir-btn a { padding: 13px; border-radius: 16px; border: 3px solid var(--cizgi); background: var(--kart); box-shadow: 0 4px 0 var(--cizgi); font-weight: 800; font-size: 16px; text-align: center; text-decoration: none; color: var(--murekkep) }
+.satir-btn button, .satir-btn a { padding: 13px; border-radius: 16px; border: 3px solid var(--kenar); background: var(--kart); box-shadow: 0 4px 0 var(--cizgi); font-weight: 800; font-size: 16px; text-align: center; text-decoration: none; color: var(--murekkep) }
 .satir-btn .ana { background: var(--mor); color: #fff }
 .not { font-size: 14px; color: var(--soluk); font-weight: 500; margin: 0; text-align: center }
 .liste { display: grid; gap: 10px }
 .liste-ogesi { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 20px }
-.liste-ogesi img { width: 64px; height: 64px; border-radius: 50%; border: 2.5px solid var(--cizgi) }
+.liste-ogesi img { width: 64px; height: 64px; border-radius: 50%; border: 2.5px solid var(--kenar) }
 .liste-ogesi b { font-size: 20px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap }
 .liste-ogesi .art { font-size: 13px; padding: 2px 8px }
 .liste-ogesi p { margin: 2px 0; color: var(--soluk); font-weight: 500; font-size: 15px }
-.ara { width: 100%; padding: 14px 16px; border-radius: 18px; border: 3px solid var(--cizgi); background: var(--kart); color: var(--murekkep); font: inherit; font-weight: 600; box-shadow: 0 4px 0 var(--cizgi) }
+.ara { width: 100%; padding: 14px 16px; border-radius: 18px; border: 3px solid var(--kenar); background: var(--kart); color: var(--murekkep); font: inherit; font-weight: 600; box-shadow: 0 4px 0 var(--cizgi) }
 .sallan { animation: sallan .35s } @keyframes sallan { 25% { transform: translateX(-6px) } 75% { transform: translateX(6px) } }
 .zipla { animation: zipla .4s } @keyframes zipla { 40% { transform: translateY(-10px) scale(1.04) } }
-.ses { flex: none; width: 46px; height: 46px; border-radius: 50%; border: 2.5px solid var(--cizgi); background: var(--kart); color: var(--murekkep); box-shadow: 0 3px 0 var(--cizgi); display: inline-grid; place-items: center; cursor: pointer; padding: 0; vertical-align: middle }
+.ses { flex: none; width: 46px; height: 46px; border-radius: 50%; border: 2.5px solid var(--kenar); background: var(--kart); color: var(--murekkep); box-shadow: 0 3px 0 var(--cizgi); display: inline-grid; place-items: center; cursor: pointer; padding: 0; vertical-align: middle }
 .ses:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--cizgi) }
 .ses svg { width: 22px; height: 22px } .ses.caliyor { background: var(--sari, #FFC533) }
 .liste-ogesi .ses, .bildirim .ses { width: 34px; height: 34px; margin-left: 6px } .liste-ogesi .ses svg, .bildirim .ses svg { width: 17px; height: 17px }
@@ -142,10 +142,28 @@ h2 { font-size: 24px; margin: 0; font-weight: 800; text-wrap: balance }
 .diger-liste { display: grid; gap: 10px; margin-top: 12px }
 .diger-oge { display: flex; align-items: center; gap: 12px } .diger-oge .bayrak { width: 40px; height: 40px }
 .diger-oge > div { flex: 1; min-width: 0 } .diger-oge b { display: block; font-size: 17px } .diger-oge small { color: var(--soluk); font-size: 13px } .diger-oge small a { color: var(--mor); font-weight: 700 }
-.diger-oge button, .kart.oneri button { font: inherit; font-weight: 800; font-size: 14px; padding: 9px 13px; border-radius: 99px; border: 2.5px solid var(--cizgi); background: var(--kart); color: var(--murekkep); box-shadow: 0 3px 0 var(--cizgi); cursor: pointer; white-space: nowrap }
+.diger-oge button, .kart.oneri button { font: inherit; font-weight: 800; font-size: 14px; padding: 9px 13px; border-radius: 99px; border: 2.5px solid var(--kenar); background: var(--kart); color: var(--murekkep); box-shadow: 0 3px 0 var(--cizgi); cursor: pointer; white-space: nowrap }
 .kart.oneri { display: flex; align-items: center; gap: 12px; flex-wrap: wrap } .kart.oneri > div { flex: 1; min-width: 160px } .kart.oneri .bayrak { width: 46px; height: 46px }
 .kart.oneri b { font-size: 18px } .kart.oneri p { margin: 2px 0 0; font-size: 14px } .kart.oneri button.ana { background: var(--mor); color: #fff }
 .uyari-kutu { border: 2.5px dashed var(--cizgi); border-radius: 18px; padding: 14px 16px; font-size: 15px; background: var(--kart) }
+/* belirgin düğmeler: basılabilen her şey gölgeli ve basınca çöker; bilgi kartları düz */
+button.kart, .satir-btn button, .satir-btn a, .devam, .diger-oge button, .kart.oneri button, .geri, .ig-btn { transition: transform .08s, box-shadow .08s }
+button.kart:active, .satir-btn button:active, .satir-btn a:active, .devam:active, .diger-oge button:active, .kart.oneri button:active, .geri:active, .ig-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--cizgi) }
+.kart.seri { box-shadow: none; border-style: dashed; background: transparent }
+.ikn { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; flex: none }
+.buyuk { flex-direction: row; align-items: center; gap: 14px; padding: 20px 18px 20px 22px }
+.buyuk > div { flex: 1; display: flex; flex-direction: column; gap: 4px }
+.oynat { width: 60px; height: 60px; border-radius: 50%; background: #fff; color: var(--mor); border: 3px solid var(--kenar); display: grid; place-items: center; flex: none; box-shadow: 0 3px 0 var(--cizgi) }
+.buyuk.bitti .oynat { color: var(--dogru) } .oynat .ikn { width: 28px; height: 28px; fill: currentColor; stroke: none; margin-left: 4px }
+.kucuk { gap: 6px; padding: 14px 14px 16px }
+.simge { width: 46px; height: 46px; border-radius: 15px; border: 2.5px solid var(--kenar); display: grid; place-items: center; color: #1E1B3A; margin-bottom: 4px }
+.s-sari { background: #FFC533 } .s-mavi { background: #8FCBFF } .s-yesil { background: #86E0AE } .s-pembe { background: #FFA8C8 }
+.dil { box-shadow: 0 5px 0 var(--cizgi) } .dil .ok { width: 40px; height: 40px; border-radius: 50%; background: var(--mor); color: #fff; display: grid; place-items: center; font-size: 20px; border: 2.5px solid var(--kenar) }
+.ig-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; border-radius: 18px; border: 3px solid var(--kenar); background: linear-gradient(90deg, #7B4DFF, #E5408A 60%, #FF9A3C); color: #fff; font-weight: 800; font-size: 17px; white-space: nowrap; box-shadow: var(--golge) }
+.satir-btn button, .satir-btn a { display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; padding: 13px 8px; font-size: 15.5px }
+.satir-btn .ikn { width: 19px; height: 19px }
+.diger-oge button { background: var(--mor); color: #fff }
+.adim { font-size: 14px; color: var(--soluk); font-weight: 600; margin: 2px 0 0; text-align: left; width: 100% } .adim b { color: var(--murekkep) }
 @media print {
   @page { size: A4; margin: 13mm 12mm }
   html, body { background: #fff !important; color: #1E1B3A !important }
@@ -246,6 +264,11 @@ function digerOneri() {
   return c;
 }
 /* ----------------------------------------------------------- ekranlar */
+const IK = (d, ek = '') => `<svg class="ikn" viewBox="0 0 24 24" aria-hidden="true"${ek}>${d}</svg>`;
+const IKON = { oynat: IK('<path d="M7 4.5v15l12.5-7.5z"/>'), karisik: IK('<path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>'), liste: IK('<path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/>'),
+  yazici: IK('<path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z"/>'), yildiz: IK('<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>'),
+  paylas: IK('<path d="M4 13v7h16v-7M12 3v12M7 8l5-5 5 5"/>'), indir: IK('<path d="M12 3v12M7 10l5 5 5-5M4 21h16"/>'), kamera: IK('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>') };
+const MOBIL = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 function girisEkrani() {
   KEY = null; K = null; document.documentElement.lang = 'tr';
   ekran([
@@ -262,8 +285,8 @@ function menu() {
     $(`<div class="ust"><button class="geri" aria-label="${t('Dil seçimine dön', 'Back to languages')}">←</button><a class="etiket" href="https://www.instagram.com/${K.kanal}/" target="_blank" rel="noopener">@${K.kanal}</a></div>`),
     $(`<div><h1>${K.ad} <span class="vurgu">${t('testi', 'quiz')}</span></h1><p class="alt" style="margin-top:6px">${W.length} ${t('kelime · hepsi @' + K.kanal + ' videolarından', 'words · all from @' + K.kanal + ' videos')}</p></div>`),
     $(`<div class="kart seri"><div class="alev">${aktif}</div><div><b>${aktif ? aktif + t(' günlük seri', '-day streak') : t('Seriye bugün başla', 'Start your streak today')}</b><p class="alt">${bitti ? t('Bugünün testi tamam: ', 'Today\'s quiz done: ') + s.bugunPuan + '/' + SORU_SAYISI + t('. Yarın yeni sorular!', '. New questions tomorrow!') : t('Her gün 10 soru çöz, seriyi bozma.', 'Answer 10 questions a day, keep your streak.')}${s.enIyi > 1 ? t(' En uzun serin: ' + s.enIyi + ' gün.', ' Best streak: ' + s.enIyi + ' days.') : ''}</p></div></div>`),
-    $(`<button class="kart buyuk ${bitti ? 'bitti' : ''}" id="gunluk"><b>${bitti ? t('Bugünün testini tekrar çöz', 'Retake today\'s quiz') : t('Günün testi', 'Daily quiz')}</b><span>${t('10 soru · resim, harf, ' + (K.artikel ? 'artikel, ' : '') + 'eşleştirme', '10 questions · pictures, spelling, matching')}</span></button>`),
-    $(`<div class="izgara2"><button class="kart kucuk" id="serbest"><b>${t('Karışık test', 'Mixed quiz')}</b><small>${t('Rastgele 10 soru', '10 random questions')}</small></button><button class="kart kucuk" id="liste"><b>${t('Kelime listesi', 'Word list')}</b><small>${t('Videolarıyla', 'With videos')}</small></button><button class="kart kucuk" id="pdf"><b>PDF</b><small>${t('Liste + basılı test', 'List + printable test')}</small></button><button class="kart kucuk" id="yeni"><b>${t('Yeni kelimeler', 'New words')}</b><small>${t('Son 10 video', 'Last 10 videos')}</small></button></div>`),
+    $(`<button class="kart buyuk ${bitti ? 'bitti' : ''}" id="gunluk"><div><b>${bitti ? t('Bugünün testini tekrar çöz', 'Retake today\'s quiz') : t('Günün testi', 'Daily quiz')}</b><span>${t('10 soru · resim, harf, ' + (K.artikel ? 'artikel, ' : '') + 'eşleştirme', '10 questions · pictures, spelling, matching')}</span></div><span class="oynat">${IKON.oynat}</span></button>`),
+    $(`<div class="izgara2"><button class="kart kucuk" id="serbest"><span class="simge s-sari">${IKON.karisik}</span><b>${t('Karışık test', 'Mixed quiz')}</b><small>${t('Rastgele 10 soru', '10 random questions')}</small></button><button class="kart kucuk" id="liste"><span class="simge s-mavi">${IKON.liste}</span><b>${t('Kelime listesi', 'Word list')}</b><small>${t('Videolarıyla', 'With videos')}</small></button><button class="kart kucuk" id="pdf"><span class="simge s-yesil">${IKON.yazici}</span><b>PDF</b><small>${t('Liste + basılı test', 'List + printable test')}</small></button><button class="kart kucuk" id="yeni"><span class="simge s-pembe">${IKON.yildiz}</span><b>${t('Yeni kelimeler', 'New words')}</b><small>${t('Son 10 video', 'Last 10 videos')}</small></button></div>`),
     ...[digerDiller()].filter(Boolean)
   ]);
   uyg.querySelector('.geri').onclick = () => { location.hash = ''; };
@@ -369,7 +392,7 @@ function sonucEkrani() {
   ekran([
     $(`<div class="ust"><button class="geri" aria-label="${t('Menüye dön', 'Back to menu')}">←</button><span class="etiket">@${K.kanal}</span></div>`),
     $(`<div class="kart sonuc"><img class="kafa" src="ortak/kafa_${p >= 5 ? 'el' : 'dus'}.png" alt=""><div class="puan">${p}/${SORU_SAYISI}</div><h2>${mesaj}</h2>${test.tur === 'gunluk' ? `<p class="alt">${s.gun}${t(' günlük seri · yarın yeni 10 soru', '-day streak · 10 new questions tomorrow')}</p>` : ''}</div>`),
-    $(`<div class="kart sonuc"><h2>${t('Story\'de paylaş', 'Share to your story')}</h2><img class="story" id="story" alt="${t('Story sonuç kartı', 'Story result card')}"><div class="satir-btn"><button class="ana" id="paylas">${t('Paylaş', 'Share')}</button><button id="indir">${t('Görseli kaydet', 'Save image')}</button></div><p class="not" id="paylasNot">${t('Paylaşırken @' + K.kanal + ' hesabını etiketle!', 'Tag @' + K.kanal + ' when you share!')}</p></div>`),
+    $(`<div class="kart sonuc"><h2>${t('Story\'de paylaş', 'Share to your story')}</h2><img class="story" id="story" alt="${t('Story sonuç kartı', 'Story result card')}"><button class="ig-btn" id="paylas">${IKON.paylas}${t('Instagram Story\'de paylaş', 'Share to Instagram Story')}</button><p class="adim">${t('<b>1.</b> Açılan listede <b>Instagram</b>\'ı seç → <b>Story</b>. Görünmüyorsa listeyi sağa kaydır.<br><b>2.</b> Yine yoksa <b>“Görüntüyü Kaydet”</b> de, sonra aşağıdan <b>Instagram\'ı aç</b> ve Story\'ye galeriden ekle.', '<b>1.</b> In the list that opens, pick <b>Instagram</b> → <b>Story</b>. Swipe the list if you don\'t see it.<br><b>2.</b> Still not there? Choose <b>“Save Image”</b>, then tap <b>Open Instagram</b> below and add it from your gallery.')}</p><div class="satir-btn">${MOBIL ? `<a href="instagram://story-camera" id="igac">${IKON.kamera}${t('Instagram\'ı aç', 'Open Instagram')}</a>` : ''}<button id="indir" ${MOBIL ? '' : 'style="grid-column:1/-1"'}>${IKON.indir}${t('Görseli kaydet', 'Save image')}</button></div><p class="not" id="paylasNot">${t('Paylaşırken @' + K.kanal + ' hesabını etiketle!', 'Tag @' + K.kanal + ' when you share!')}</p></div>`),
     ...[digerOneri()].filter(Boolean),
     ...(yanlis.length ? [$(`<div class="kart" style="padding:16px 14px"><h2 style="margin:0 4px 10px">${t('Tekrar et', 'Review')}</h2><div class="liste">${yanlis.map(ogeHtml).join('')}</div></div>`)] : []),
     $(`<div class="satir-btn"><button id="tekrar">${t('Yeni test', 'New quiz')}</button><button class="ana" id="menu">${t('Menü', 'Menu')}</button></div>`)
@@ -377,10 +400,11 @@ function sonucEkrani() {
   uyg.querySelector('.geri').onclick = menu; uyg.querySelector('#menu').onclick = menu; uyg.querySelector('#tekrar').onclick = () => basla('serbest');
   storyCiz(p, s).then((blob) => {
     const url = URL.createObjectURL(blob); uyg.querySelector('#story').src = url; const not = uyg.querySelector('#paylasNot');
-    uyg.querySelector('#paylas').onclick = async () => { const f = new File([blob], K.kanal + '_sonuc.png', { type: 'image/png' });
-      try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: K.ad + t(' testi', ' quiz') }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+    uyg.querySelector('#paylas').onclick = async () => { const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' });
+      try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
       not.textContent = t('Bu tarayıcı doğrudan paylaşmaya izin vermiyor. Görsele basılı tutup kaydet, sonra story\'ne ekle.', 'This browser can\'t share directly. Press and hold the image to save it, then add it to your story.'); };
-    uyg.querySelector('#indir').onclick = () => { const a = document.createElement('a'); a.href = url; a.download = K.kanal + '_sonuc.png'; document.body.append(a); a.click(); a.remove();
+    uyg.querySelector('#indir').onclick = async () => { if (MOBIL) { const f = new File([blob], K.kanal + '_sonuc.jpg', { type: 'image/jpeg' }); try { if (navigator.canShare && navigator.canShare({ files: [f] })) { not.textContent = t('Listede “Görüntüyü Kaydet”i seç.', 'Choose “Save Image” in the list.'); await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; } }
+      const a = document.createElement('a'); a.href = url; a.download = K.kanal + '_sonuc.jpg'; document.body.append(a); a.click(); a.remove();
       not.textContent = t('İnmediyse görsele basılı tutup "Fotoğraflara kaydet"i seç.', 'If it didn\'t download, press and hold the image and choose "Save to Photos".'); };
   });
 }
@@ -400,7 +424,7 @@ async function storyCiz(p, s) {
   if (test.tur === 'gunluk' && s.gun) { kart(330, 1060, 420, 110, 55, '#FFC533'); yazi(s.gun + t(' günlük seri', '-day streak'), 540, 1116, 52, 800, '#1E1B3A'); }
   const kafa = await resim('ortak/kafa_' + (p >= 5 ? 'el' : 'dus') + '.png'); if (kafa) { const h = 520, w2 = kafa.width * h / kafa.height; x.drawImage(kafa, 540 - w2 / 2, 1220, w2, h); }
   kart(160, 1770, 760, 100, 50, '#6B4EE6'); yazi(t('Sen kaç yaparsın?', 'Can you beat me?'), 540, 1822, 52, 800, '#FFFFFF');
-  return new Promise((ok) => c.toBlob(ok, 'image/png'));
+  return new Promise((ok) => c.toBlob(ok, 'image/jpeg', 0.93));
 }
 /* ----------------------------------------------------------- kelime listesi */
 function ogeHtml(w) { return `<div class="kart liste-ogesi"><img src="${w.ikon}" alt="" loading="lazy"><div><b>${artCip(w)}${esc(w.de)}${sesBtn(w)}<span class="alt" style="font-size:16px">= ${esc(w.tr)}</span></b><p>${icerikHtml(w)}</p>${w.not ? `<p class="alt" style="font-size:14px">${esc(w.not)}</p>` : ''}<a class="video" href="${reel(w)}" target="_blank" rel="noopener">${t('Videosunu izle', 'Watch the video')} ↗</a></div></div>`; }
